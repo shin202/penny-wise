@@ -13,6 +13,7 @@ const config = (): TypeOrmModuleOptions => ({
   password: process.env.MYSQL_PASSWORD,
   database: process.env.DATABASE_NAME,
   autoLoadEntities: true,
+  logging: ['query', 'error'],
 });
 
 export const typeormConfig = registerAs(
