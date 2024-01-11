@@ -1,25 +1,14 @@
 import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { MailModule, MailService } from './mail';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigService } from '@nestjs/config';
-import {
-  VerifyEmailTokenMiddleware,
-  VerifyTemporaryUrlMiddleware,
-} from './middlewares';
-import { EmailVerificationController } from '../email-verification';
-import { EmailVerifyTokensModule } from '../email-verify-tokens';
+import { MailModule } from './mail/mail.module';
+import { MailService } from './mail/mail.service';
+import { VerifyEmailTokenMiddleware } from './middlewares/verify-email-token.middleware';
+import { VerifyTemporaryUrlMiddleware } from './middlewares/verify-temporary-url.middleware';
+import { EmailVerificationController } from '../email-verification/email-verification.controller';
+import { EmailVerifyTokensModule } from '../email-verify-tokens/email-verify-tokens.module';
 
 @Global()
 @Module({
-  imports: [
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        configService.get('typeorm'),
-    }),
-    MailModule,
-    EmailVerifyTokensModule,
-  ],
+  imports: [MailModule, EmailVerifyTokensModule],
   providers: [MailService],
   exports: [MailService],
 })

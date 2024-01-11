@@ -1,7 +1,7 @@
 import { HttpException, Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { EmailVerifyTokensService } from '../../email-verify-tokens';
-import { EmailVerificationParams } from '../../email-verification';
+import { EmailVerifyTokensService } from '../../email-verify-tokens/email-verify-tokens.service';
+import { EmailVerificationParams } from '../../email-verification/email-verification.interface';
 
 @Injectable()
 export class VerifyEmailTokenMiddleware implements NestMiddleware {

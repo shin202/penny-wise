@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 
-import { CreateEmailVerifyTokenDto, UpdateEmailVerifyTokenDto } from './dto';
-import { EmailVerifyToken } from './entities';
+import { CreateEmailVerifyTokenDto } from './dto/create-email-verify-token.dto';
+import { UpdateEmailVerifyTokenDto } from './dto/update-email-verify-token.dto';
+import { EmailVerifyToken } from './entities/email-verify-token.entity';
 import { RandomUtils } from '../utils';
 import * as dayjs from 'dayjs';
 

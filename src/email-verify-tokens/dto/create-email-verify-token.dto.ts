@@ -1,6 +1,6 @@
 import { IsInt, IsNotEmpty } from 'class-validator';
-import { IsExists } from '../../shared';
-import { User } from '../../users';
+import { IsExists } from '../../shared/validation/is-exists';
+import { User } from '../../users/entities/user.entity';
 
 export class CreateEmailVerifyTokenDto {
   @IsExists(User, 'id')

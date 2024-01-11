@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Version } from '@nestjs/common';
 import { EmailVerificationParams } from './email-verification.interface';
-import { VerifyService } from './verify';
-import { ResendService } from './resend';
+import { VerifyService } from './verify/verify.service';
+import { ResendService } from './resend/resend.service';
 
 @Controller('email')
 export class EmailVerificationController {

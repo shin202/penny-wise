@@ -6,8 +6,8 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { IsUnique } from '../../shared';
-import { User } from '../entities';
+import { IsUnique } from '../../shared/validation/is-unique';
+import { User } from '../entities/user.entity';
 
 export class CreateUserDto {
   @IsUnique(User, 'username')

@@ -2,9 +2,10 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 
-import { LoginCredentialsDto } from './dto';
-import { User, UsersService } from '../../users';
-import { Transform } from '../../common';
+import { LoginCredentialsDto } from './dto/login-credentials.dto';
+import { User } from '../../users/entities/user.entity';
+import { UsersService } from '../../users/users.service';
+import { Transform } from '../../common/interceptors/transform.interface';
 
 @Injectable()
 export class LoginService {

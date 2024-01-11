@@ -12,7 +12,7 @@ import { Exclude } from 'class-transformer';
 import * as dayjs from 'dayjs';
 
 import { PasswordUtils } from '../../utils';
-import { EmailVerifyToken } from '../../email-verify-tokens';
+import { EmailVerifyToken } from '../../email-verify-tokens/entities/email-verify-token.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {

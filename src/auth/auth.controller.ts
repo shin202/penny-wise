@@ -11,11 +11,12 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-import { RegisterService } from './register';
-import { CreateUserDto, User } from '../users';
-import { Transform } from '../common';
-import { LoginCredentialsDto } from './login/dto';
-import { LoginService } from './login';
+import { RegisterService } from './register/register.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { User } from '../users/entities/user.entity';
+import { Transform } from '../common/interceptors/transform.interface';
+import { LoginCredentialsDto } from './login/dto/login-credentials.dto';
+import { LoginService } from './login/login.service';
 import { AuthGuard } from './auth.guard';
 
 @Controller('auth')

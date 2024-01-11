@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../../users';
-import {
-  EmailVerifyToken,
-  EmailVerifyTokensService,
-} from '../../email-verify-tokens';
+import { UsersService } from '../../users/users.service';
+import { EmailVerifyToken } from '../../email-verify-tokens/entities/email-verify-token.entity';
+import { EmailVerifyTokensService } from '../../email-verify-tokens/email-verify-tokens.service';
 import { EmailVerificationParams } from '../email-verification.interface';
-import { Transform } from '../../common';
+import { Transform } from '../../common/interceptors/transform.interface';
 
 @Injectable()
 export class VerifyService {
