@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { WinstonModule } from 'nest-winston';
 import { useContainer } from 'class-validator';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 import { loggerConfig, validationPipeConfig } from './config';
@@ -21,6 +22,7 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: '1',
   });
+  app.use(cookieParser());
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const appService = app.get(ConfigService);

@@ -20,4 +20,30 @@ export class UsersService {
     user.markAsVerified();
     return this.userRepository.save(user);
   }
+
+  findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+  }
+
+  findByUsername(username: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: {
+        username,
+      },
+    });
+  }
+
+  findByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+      select: {
+        username: true,
+        password: true,
+      },
+    });
+  }
 }

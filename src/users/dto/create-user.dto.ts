@@ -7,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { IsUnique } from '../../shared';
-import { User } from '../entities/user.entity';
+import { User } from '../entities';
 
 export class CreateUserDto {
   @IsUnique(User, 'username')
