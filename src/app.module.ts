@@ -1,18 +1,23 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
-import globalConfig from '../config/global.config';
-import databaseConfig from '../config/database.config';
+import { AuthModule } from './auth';
+import { CommonModule } from './common';
+import { globalConfig, jwtConfig, mailerConfig, typeormConfig } from './config';
+import { IsExistsConstraint, IsUniqueConstraint } from './shared';
+import { EmailVerificationModule } from './email-verification';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [globalConfig],
+      isGlobal: true,
+      load: [globalConfig, typeormConfig, mailerConfig, jwtConfig],
     }),
-    TypeOrmModule.forRoot(databaseConfig()),
+    CommonModule,
+    AuthModule,
+    EmailVerificationModule,
   ],
   controllers: [],
-  providers: [Logger],
+  providers: [Logger, IsUniqueConstraint, IsExistsConstraint],
 })
 export class AppModule {}
