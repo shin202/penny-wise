@@ -36,8 +36,8 @@ export class AuthController {
   }
 
   @Post('login')
-  @HttpCode(200)
   @Version('1')
+  @HttpCode(200)
   login(
     @Body() loginCredentials: LoginCredentialsDto,
     @Res({ passthrough: true }) res: Response,

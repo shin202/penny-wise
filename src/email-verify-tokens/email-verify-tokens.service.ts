@@ -4,10 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { Repository } from 'typeorm';
 
 import { CreateEmailVerifyTokenDto } from './dto/create-email-verify-token.dto';
-import { UpdateEmailVerifyTokenDto } from './dto/update-email-verify-token.dto';
 import { EmailVerifyToken } from './entities/email-verify-token.entity';
 import { RandomUtils } from '../utils';
 import * as dayjs from 'dayjs';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class EmailVerifyTokensService {
@@ -36,10 +36,6 @@ export class EmailVerifyTokensService {
     return this.emailVerifyTokenRepository.save(emailVerifyToken);
   }
 
-  findAll() {
-    return `This action returns all emailVerifyTokens`;
-  }
-
   findOne(id: number) {
     return `This action returns a #${id} emailVerifyToken`;
   }
@@ -66,11 +62,7 @@ export class EmailVerifyTokensService {
     return this.emailVerifyTokenRepository.save(emailVerifyToken);
   }
 
-  update(id: number, updateEmailVerifyTokenDto: UpdateEmailVerifyTokenDto) {
-    return `This action updates a #${id} emailVerifyToken`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} emailVerifyToken`;
+  deleteAllByUser(user: User) {
+    return this.emailVerifyTokenRepository.remove(user.emailVerifyTokens);
   }
 }

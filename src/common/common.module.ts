@@ -1,4 +1,10 @@
-import { Global, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  Global,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { MailModule } from './mail/mail.module';
 import { VerifyEmailTokenMiddleware } from './middlewares/verify-email-token.middleware';
 import { VerifyTemporaryUrlMiddleware } from './middlewares/verify-temporary-url.middleware';
@@ -14,6 +20,11 @@ export class CommonModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
     consumer
       .apply(VerifyTemporaryUrlMiddleware, VerifyEmailTokenMiddleware)
+      .exclude({
+        version: '1',
+        path: 'email/resend',
+        method: RequestMethod.POST,
+      })
       .forRoutes(EmailVerificationController);
   }
 }

@@ -27,8 +27,13 @@ export class UsersService {
         email,
       },
       select: {
+        id: true,
         username: true,
         email: true,
+        emailVerifyTokens: true,
+      },
+      relations: {
+        emailVerifyTokens: true,
       },
     });
   }
