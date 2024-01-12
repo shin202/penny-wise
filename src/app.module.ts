@@ -8,6 +8,7 @@ import { globalConfig, jwtConfig, mailerConfig, typeormConfig } from './config';
 import { IsExistsConstraint } from './shared/validation/is-exists.constraint';
 import { IsUniqueConstraint } from './shared/validation/is-unique.constraint';
 import { EmailVerificationModule } from './email-verification/email-verification.module';
+import { PasswordResetsModule } from './password-resets/password-resets.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { EmailVerificationModule } from './email-verification/email-verification
     CommonModule,
     AuthModule,
     EmailVerificationModule,
+    PasswordResetsModule,
   ],
   controllers: [],
   providers: [Logger, IsUniqueConstraint, IsExistsConstraint],

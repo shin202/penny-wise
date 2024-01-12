@@ -1,4 +1,4 @@
-import { Injectable, Req } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../users/users.service';
 import { Transform } from '../../common/interceptors/transform.interface';
 import { MailFactory } from '../../common/mail/mail-factory/mail.factory';
@@ -19,7 +19,7 @@ export class ResendService {
 
   async resend(
     resendEmailVerificationDto: ResendEmailVerificationDto,
-    @Req() req: Request,
+    req: Request,
   ): Promise<Transform<any>> {
     const { email } = resendEmailVerificationDto;
 
