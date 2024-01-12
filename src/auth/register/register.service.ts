@@ -6,16 +6,16 @@ import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 import { EmailVerifyToken } from '../../email-verify-tokens/entities/email-verify-token.entity';
 import { EmailVerifyTokensService } from '../../email-verify-tokens/email-verify-tokens.service';
-import { MailService } from '../../common/mail/mail.service';
 import { Transform } from 'src/common/interceptors/transform.interface';
-import { VerificationTokenPayload } from '../../common/mail/mail.interface';
+import { EmailVerifyPayload } from '../../common/mail/mail.interface';
+import { MailFactory } from '../../common/mail/mail-factory/mail.factory';
 
 @Injectable()
 export class RegisterService {
   constructor(
     private readonly usersService: UsersService,
     private readonly emailVerifyTokensService: EmailVerifyTokensService,
-    private readonly mailService: MailService,
+    private readonly mailFactory: MailFactory,
   ) {}
 
   async register(
@@ -31,9 +31,10 @@ export class RegisterService {
 
     const { username, email } = user;
     const { token } = emailVerifyToken;
-    const payload: VerificationTokenPayload = { username, email, token };
+    const payload: EmailVerifyPayload = { username, email, token };
 
-    await this.mailService.sendVerificationEmail(req, payload);
+    const mailService = this.mailFactory.create('email-verification');
+    await mailService.send(req, payload);
 
     return {
       status: 'success',

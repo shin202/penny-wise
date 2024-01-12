@@ -6,8 +6,7 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
-import { loggerConfig } from './config/logger.config';
-import { validationPipeConfig } from './config/validation-pipe.config';
+import { loggerConfig, validationPipeConfig } from './config';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 

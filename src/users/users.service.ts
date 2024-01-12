@@ -26,6 +26,10 @@ export class UsersService {
       where: {
         email,
       },
+      select: {
+        username: true,
+        email: true,
+      },
     });
   }
 
