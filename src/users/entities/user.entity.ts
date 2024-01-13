@@ -1,6 +1,8 @@
 import {
+  AfterLoad,
   BaseEntity,
   BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -16,6 +18,8 @@ import { EmailVerifyToken } from '../../email-verify-tokens/entities/email-verif
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
+  private tempPassword: string;
+
   constructor(partial: Partial<User>) {
     super();
     Object.assign(this, partial);
@@ -74,5 +78,17 @@ export class User extends BaseEntity {
   markAsVerified(): void {
     this.isVerified = true;
     this.emailVerifiedAt = dayjs().toDate();
+  }
+
+  @AfterLoad()
+  private loadTempPassword(): void {
+    this.tempPassword = this.password;
+  }
+
+  @BeforeUpdate()
+  private checkPasswordChanged(): void {
+    if (this.tempPassword !== this.password) {
+      this.password = PasswordUtils.hashPassword(this.password);
+    }
   }
 }

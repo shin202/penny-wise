@@ -30,6 +30,7 @@ export class UsersService {
         id: true,
         username: true,
         email: true,
+        password: true,
         emailVerifyTokens: true,
       },
       relations: {
@@ -54,5 +55,10 @@ export class UsersService {
         password: true,
       },
     });
+  }
+
+  updatePassword(user: User, password: string) {
+    user.password = password;
+    return this.userRepository.save(user);
   }
 }

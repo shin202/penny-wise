@@ -21,4 +21,18 @@ export class PasswordResetsService {
 
     return this.passwordResetRepository.save(passwordReset);
   }
+
+  findByToken(token: string) {
+    return this.passwordResetRepository.findOne({
+      where: {
+        token,
+      },
+    });
+  }
+
+  deleteAllByEmail(email: string) {
+    return this.passwordResetRepository.delete({
+      email,
+    });
+  }
 }

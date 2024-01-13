@@ -9,6 +9,7 @@ import { IsExistsConstraint } from './shared/validation/is-exists.constraint';
 import { IsUniqueConstraint } from './shared/validation/is-unique.constraint';
 import { EmailVerificationModule } from './email-verification/email-verification.module';
 import { PasswordResetsModule } from './password-resets/password-resets.module';
+import { IsEqualConstraint } from './shared/validation/is-equal.constraint';
 
 @Module({
   imports: [
@@ -27,6 +28,11 @@ import { PasswordResetsModule } from './password-resets/password-resets.module';
     PasswordResetsModule,
   ],
   controllers: [],
-  providers: [Logger, IsUniqueConstraint, IsExistsConstraint],
+  providers: [
+    Logger,
+    IsUniqueConstraint,
+    IsExistsConstraint,
+    IsEqualConstraint,
+  ],
 })
 export class AppModule {}
