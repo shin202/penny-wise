@@ -7,5 +7,5 @@ export const globalConfig = () => ({
     process.env.EMAIL_VERIFY_ENDPOINT || '/api/v1/email/verify',
   passwordResetTokenTtl: +process.env.PASSWORD_RESET_TOKEN_TTL || 30,
   passwordResetEndpoint:
-    process.env.PASSWORD_RESET_ENDPOINT || '/api/v1/password/forgot',
+    process.env.PASSWORD_RESET_ENDPOINT || '/api/v1/password/reset',
 });

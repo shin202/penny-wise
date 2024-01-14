@@ -22,7 +22,9 @@
     "migration:run": "npm run typeorm migration:run",
     "migration:generate": "npm run typeorm migration:generate ./src/database/migrations/%npm_config_name%",
     "migration:create": "typeorm-ts-node-esm migration:create ./src/database/migrations/%npm_config_name%",
-    "migration:revert": "npm run typeorm migration:revert"
+    "migration:revert": "npm run typeorm migration:revert",
+    "seed:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:create --name ./src/database/seeders/%npm_config_name%",
+    "seed:run": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/config/typeorm.config.ts"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.10.3",
@@ -45,6 +47,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.19",
+    "typeorm-extension": "^3.3.0",
     "url-shield": "^1.0.3",
     "winston": "^3.11.0"
   },

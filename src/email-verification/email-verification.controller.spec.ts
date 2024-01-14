@@ -9,7 +9,9 @@ describe('EmailVerificationController', () => {
       controllers: [EmailVerificationController],
     }).compile();
 
-    controller = module.get<EmailVerificationController>(EmailVerificationController);
+    controller = module.get<EmailVerificationController>(
+      EmailVerificationController,
+    );
   });
 
   it('should be defined', () => {

@@ -10,11 +10,20 @@ import { VerifyTemporaryUrlMiddleware } from './middlewares/verify-temporary-url
 import { EmailVerificationController } from '../email-verification/email-verification.controller';
 import { EmailVerifyTokensModule } from '../email-verify-tokens/email-verify-tokens.module';
 import { PasswordResetsController } from '../password-resets/password-resets.controller';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Global()
 @Module({
-  imports: [MailModule, EmailVerifyTokensModule],
-  exports: [MailModule],
+  imports: [
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => configService.get('jwt'),
+    }),
+    MailModule,
+    EmailVerifyTokensModule,
+  ],
+  exports: [JwtModule, MailModule],
 })
 export class CommonModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

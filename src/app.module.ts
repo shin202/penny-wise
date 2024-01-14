@@ -10,6 +10,7 @@ import { IsUniqueConstraint } from './shared/validation/is-unique.constraint';
 import { EmailVerificationModule } from './email-verification/email-verification.module';
 import { PasswordResetsModule } from './password-resets/password-resets.module';
 import { IsEqualConstraint } from './shared/validation/is-equal.constraint';
+import { CurrenciesModule } from './currencies/currencies.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { IsEqualConstraint } from './shared/validation/is-equal.constraint';
     AuthModule,
     EmailVerificationModule,
     PasswordResetsModule,
+    CurrenciesModule,
   ],
   controllers: [],
   providers: [
