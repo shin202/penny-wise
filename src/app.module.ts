@@ -12,6 +12,7 @@ import { PasswordResetsModule } from './password-resets/password-resets.module';
 import { IsEqualConstraint } from './shared/validation/is-equal.constraint';
 import { CurrenciesModule } from './currencies/currencies.module';
 import { WalletsModule } from './wallets/wallets.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { WalletsModule } from './wallets/wallets.module';
     PasswordResetsModule,
     CurrenciesModule,
     WalletsModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [

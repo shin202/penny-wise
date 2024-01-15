@@ -21,11 +21,6 @@ import { Wallet } from '../../wallets/entities/wallet.entity';
 export class User extends BaseEntity {
   private tempPassword: string;
 
-  constructor(partial: Partial<User>) {
-    super();
-    Object.assign(this, partial);
-  }
-
   @PrimaryGeneratedColumn()
   id: number;
 
