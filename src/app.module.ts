@@ -13,17 +13,30 @@ import { IsEqualConstraint } from './shared/validation/is-equal.constraint';
 import { CurrenciesModule } from './currencies/currencies.module';
 import { WalletsModule } from './wallets/wallets.module';
 import { CategoriesModule } from './categories/categories.module';
+import { ImagesModule } from './images/images.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { multerConfig } from './config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [globalConfig, typeormConfig, mailerConfig, jwtConfig],
+      load: [
+        globalConfig,
+        typeormConfig,
+        mailerConfig,
+        jwtConfig,
+        multerConfig,
+      ],
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
         configService.get('typeorm'),
+    }),
+    MulterModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => configService.get('multer'),
     }),
     CommonModule,
     AuthModule,
@@ -32,6 +45,7 @@ import { CategoriesModule } from './categories/categories.module';
     CurrenciesModule,
     WalletsModule,
     CategoriesModule,
+    ImagesModule,
   ],
   controllers: [],
   providers: [

@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { WalletStatus } from '../wallet.interface';
-import { Exclude, Transform } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { Currency } from '../../currencies/entities/currency.entity';
 
 @Entity({ name: 'wallets' })
