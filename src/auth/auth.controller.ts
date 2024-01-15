@@ -18,12 +18,14 @@ import { Transform } from '../common/interceptors/transform.interface';
 import { LoginCredentialsDto } from './login/dto/login-credentials.dto';
 import { LoginService } from './login/login.service';
 import { AuthGuard } from './auth.guard';
+import { RefreshService } from './refresh/refresh.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly registerService: RegisterService,
     private readonly loginService: LoginService,
+    private readonly refreshService: RefreshService,
   ) {}
 
   @Post('register')
@@ -56,5 +58,11 @@ export class AuthController {
       message: 'You have been successfully logged out',
       data: null,
     };
+  }
+
+  @Get('refresh')
+  @Version('1')
+  refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    return this.refreshService.refreshToken(req, res);
   }
 }

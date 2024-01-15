@@ -8,4 +8,5 @@ export const globalConfig = () => ({
   passwordResetTokenTtl: +process.env.PASSWORD_RESET_TOKEN_TTL || 30,
   passwordResetEndpoint:
     process.env.PASSWORD_RESET_ENDPOINT || '/api/v1/password/reset',
+  refreshTokenTtl: +process.env.REFRESH_TOKEN_TTL || 604800,
 });

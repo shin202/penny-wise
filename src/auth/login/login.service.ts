@@ -6,13 +6,22 @@ import { LoginCredentialsDto } from './dto/login-credentials.dto';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
 import { Transform } from '../../common/interceptors/transform.interface';
+import { TokenPayload } from '../auth.interface';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class LoginService {
+  private readonly REFRESH_TOKEN_TTL: number;
+  private readonly REFRESH_TOKEN_TTL_IN_MS: number;
+
   constructor(
+    private readonly configService: ConfigService,
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    this.REFRESH_TOKEN_TTL = this.configService.get<number>('refreshTokenTtl');
+    this.REFRESH_TOKEN_TTL_IN_MS = this.REFRESH_TOKEN_TTL * 1000;
+  }
 
   async login(
     loginCredentials: LoginCredentialsDto,
@@ -39,15 +48,19 @@ export class LoginService {
       );
     }
 
-    const payload = { username: user.username, sub: user.id };
+    const payload: TokenPayload = {
+      username: user.username,
+      sub: { id: user.id },
+    };
+
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: '7d',
+      expiresIn: this.REFRESH_TOKEN_TTL,
     });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
+      maxAge: this.REFRESH_TOKEN_TTL_IN_MS,
       sameSite: 'strict',
     });
 
