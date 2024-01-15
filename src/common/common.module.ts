@@ -12,6 +12,7 @@ import { EmailVerifyTokensModule } from '../email-verify-tokens/email-verify-tok
 import { PasswordResetsController } from '../password-resets/password-resets.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { UsersModule } from '../users/users.module';
 
 @Global()
 @Module({
@@ -20,10 +21,11 @@ import { ConfigService } from '@nestjs/config';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => configService.get('jwt'),
     }),
+    UsersModule,
     MailModule,
     EmailVerifyTokensModule,
   ],
-  exports: [JwtModule, MailModule],
+  exports: [JwtModule, MailModule, UsersModule],
 })
 export class CommonModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

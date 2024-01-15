@@ -13,8 +13,8 @@ import { MailFactory } from '../../common/mail/mail-factory/mail.factory';
 @Injectable()
 export class RegisterService {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly emailVerifyTokensService: EmailVerifyTokensService,
+    private readonly userService: UsersService,
+    private readonly emailVerifyTokenService: EmailVerifyTokensService,
     private readonly mailFactory: MailFactory,
   ) {}
 
@@ -22,10 +22,10 @@ export class RegisterService {
     createUserDto: CreateUserDto,
     @Req() req: Request,
   ): Promise<Transform<any>> {
-    const user: User = await this.usersService.create(createUserDto);
+    const user: User = await this.userService.create(createUserDto);
 
     const emailVerifyToken: EmailVerifyToken =
-      await this.emailVerifyTokensService.create({
+      await this.emailVerifyTokenService.create({
         userId: user.id,
       });
 

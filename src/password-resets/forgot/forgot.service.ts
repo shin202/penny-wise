@@ -12,8 +12,8 @@ import { PasswordResetPayload } from '../../common/mail/mail.interface';
 @Injectable()
 export class ForgotService {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly passwordResetsService: PasswordResetsService,
+    private readonly userService: UsersService,
+    private readonly passwordResetService: PasswordResetsService,
     private readonly mailFactory: MailFactory,
   ) {}
 
@@ -23,7 +23,7 @@ export class ForgotService {
   ): Promise<Transform<any>> {
     const { email } = createPasswordResetDto;
 
-    const user: User = await this.usersService.findByEmail(email);
+    const user: User = await this.userService.findByEmail(email);
 
     if (!user) {
       return {
@@ -34,8 +34,9 @@ export class ForgotService {
       };
     }
 
-    const passwordReset: PasswordReset =
-      await this.passwordResetsService.create(createPasswordResetDto);
+    const passwordReset: PasswordReset = await this.passwordResetService.create(
+      createPasswordResetDto,
+    );
 
     const payload: PasswordResetPayload = {
       username: user.username,

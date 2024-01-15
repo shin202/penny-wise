@@ -10,7 +10,7 @@ import { Transform } from '../../common/interceptors/transform.interface';
 @Injectable()
 export class LoginService {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly userService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -21,7 +21,7 @@ export class LoginService {
     const { usernameOrEmail, password } = loginCredentials;
 
     const user: User =
-      await this.usersService.findByUsernameOrEmail(usernameOrEmail);
+      await this.userService.findByUsernameOrEmail(usernameOrEmail);
 
     if (!user) {
       throw new HttpException(

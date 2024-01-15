@@ -51,6 +51,7 @@ export class UsersService {
     return this.userRepository.findOne({
       where: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
       select: {
+        id: true,
         username: true,
         password: true,
       },

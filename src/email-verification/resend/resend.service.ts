@@ -12,8 +12,8 @@ import { ResendEmailVerificationDto } from '../dto/resend-email-verification.dto
 @Injectable()
 export class ResendService {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly emailVerifyTokensService: EmailVerifyTokensService,
+    private readonly userService: UsersService,
+    private readonly emailVerifyTokenService: EmailVerifyTokensService,
     private readonly mailFactory: MailFactory,
   ) {}
 
@@ -23,7 +23,7 @@ export class ResendService {
   ): Promise<Transform<any>> {
     const { email } = resendEmailVerificationDto;
 
-    const user: User = await this.usersService.findByEmail(email);
+    const user: User = await this.userService.findByEmail(email);
 
     if (!user) {
       return {
@@ -42,10 +42,10 @@ export class ResendService {
       };
     }
 
-    await this.emailVerifyTokensService.deleteAllByUser(user);
+    await this.emailVerifyTokenService.deleteAllByUser(user);
 
     const verifyToken: EmailVerifyToken =
-      await this.emailVerifyTokensService.create({
+      await this.emailVerifyTokenService.create({
         userId: user.id,
       });
 

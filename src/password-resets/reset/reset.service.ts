@@ -10,8 +10,8 @@ import { Transform } from '../../common/interceptors/transform.interface';
 @Injectable()
 export class ResetService {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly passwordResetsService: PasswordResetsService,
+    private readonly userService: UsersService,
+    private readonly passwordResetService: PasswordResetsService,
   ) {}
 
   async reset(
@@ -21,13 +21,13 @@ export class ResetService {
     const { token } = passwordResetParams;
 
     const passwordReset: PasswordReset =
-      await this.passwordResetsService.findByToken(token);
+      await this.passwordResetService.findByToken(token);
 
     if (!passwordReset) {
       throw new HttpException('Invalid token', 400);
     }
 
-    const user: User = await this.usersService.findByEmail(passwordReset.email);
+    const user: User = await this.userService.findByEmail(passwordReset.email);
 
     if (!user) {
       throw new HttpException('Invalid token', 400);
@@ -35,8 +35,8 @@ export class ResetService {
 
     const { password } = passwordResetDto;
 
-    await this.usersService.updatePassword(user, password);
-    await this.passwordResetsService.deleteAllByEmail(passwordReset.email);
+    await this.userService.updatePassword(user, password);
+    await this.passwordResetService.deleteAllByEmail(passwordReset.email);
 
     return {
       status: 'success',

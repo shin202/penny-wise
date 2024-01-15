@@ -1,13 +1,16 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Wallet } from '../../wallets/entities/wallet.entity';
 
 @Entity({ name: 'currencies' })
-export class Currency {
+export class Currency extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -34,4 +37,7 @@ export class Currency {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany(() => Wallet, (wallet) => wallet.currency)
+  wallets: Wallet[];
 }

@@ -6,10 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly userService: UsersService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -23,8 +27,9 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verify(token);
+      const user = await this.userService.findByUsername(payload.username);
 
-      request.user = payload;
+      request.user = user;
     } catch (e) {
       throw new UnauthorizedException(
         'You are not authorized to access this resource',

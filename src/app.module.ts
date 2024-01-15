@@ -11,6 +11,7 @@ import { EmailVerificationModule } from './email-verification/email-verification
 import { PasswordResetsModule } from './password-resets/password-resets.module';
 import { IsEqualConstraint } from './shared/validation/is-equal.constraint';
 import { CurrenciesModule } from './currencies/currencies.module';
+import { WalletsModule } from './wallets/wallets.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CurrenciesModule } from './currencies/currencies.module';
     EmailVerificationModule,
     PasswordResetsModule,
     CurrenciesModule,
+    WalletsModule,
   ],
   controllers: [],
   providers: [

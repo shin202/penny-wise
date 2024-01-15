@@ -5,10 +5,9 @@ import { ForgotService } from './forgot/forgot.service';
 import { ResetService } from './reset/reset.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PasswordReset } from './entities/password-reset.entity';
-import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PasswordReset]), UsersModule],
+  imports: [TypeOrmModule.forFeature([PasswordReset])],
   controllers: [PasswordResetsController],
   providers: [PasswordResetsService, ForgotService, ResetService],
 })

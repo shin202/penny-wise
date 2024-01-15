@@ -8,15 +8,15 @@ import { Transform } from '../../common/interceptors/transform.interface';
 @Injectable()
 export class VerifyService {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly emailVerifyTokensService: EmailVerifyTokensService,
+    private readonly userService: UsersService,
+    private readonly emailVerifyTokenService: EmailVerifyTokensService,
   ) {}
 
   async verify(params: EmailVerificationParams): Promise<Transform<any>> {
     const { token } = params;
 
     const emailVerifyToken: EmailVerifyToken =
-      await this.emailVerifyTokensService.findByToken(token);
+      await this.emailVerifyTokenService.findByToken(token);
 
     if (!emailVerifyToken) {
       throw new HttpException(
@@ -37,8 +37,8 @@ export class VerifyService {
       };
     }
 
-    await this.emailVerifyTokensService.markAsUsed(emailVerifyToken);
-    await this.usersService.markAsVerified(emailVerifyToken.user);
+    await this.emailVerifyTokenService.markAsUsed(emailVerifyToken);
+    await this.userService.markAsVerified(emailVerifyToken.user);
 
     return {
       status: 'success',

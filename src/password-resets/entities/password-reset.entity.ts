@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -8,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'password_resets' })
-export class PasswordReset {
+export class PasswordReset extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
