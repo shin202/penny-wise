@@ -13,6 +13,7 @@ import { PasswordResetsController } from '../password-resets/password-resets.con
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersModule } from '../users/users.module';
+import { ImagesModule } from '../images/images.module';
 
 @Global()
 @Module({
@@ -24,8 +25,9 @@ import { UsersModule } from '../users/users.module';
     UsersModule,
     MailModule,
     EmailVerifyTokensModule,
+    ImagesModule,
   ],
-  exports: [JwtModule, MailModule, UsersModule],
+  exports: [JwtModule, MailModule, UsersModule, ImagesModule],
 })
 export class CommonModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

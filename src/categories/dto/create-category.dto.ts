@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 import { IsExists } from '../../shared/validation/is-exists';
 import { Category } from '../entities/category.entity';
+import { Image } from '../../images/entities/image.entity';
 
 export class CreateCategoryDto {
   @IsString()
@@ -24,4 +25,9 @@ export class CreateCategoryDto {
   @IsNumber()
   @IsOptional()
   parentId?: number;
+
+  @IsExists(Image, 'name')
+  @IsString()
+  @IsNotEmpty()
+  imageName: string;
 }

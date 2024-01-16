@@ -8,6 +8,8 @@ import { Request } from 'express';
 import { User } from '../users/entities/user.entity';
 import { CurrenciesService } from '../currencies/currencies.service';
 import { Currency } from '../currencies/entities/currency.entity';
+import { Image } from '../images/entities/image.entity';
+import { ImagesService } from '../images/images.service';
 
 @Injectable()
 export class WalletsService {
@@ -15,18 +17,22 @@ export class WalletsService {
     @InjectRepository(Wallet)
     private readonly walletRepository: Repository<Wallet>,
     private readonly currencyService: CurrenciesService,
+    private readonly imageService: ImagesService,
   ) {}
 
   async create(
     createWalletDto: CreateWalletDto,
     req: Request & { user: User },
   ): Promise<Wallet> {
-    const { currencyId, ...rest } = createWalletDto;
+    const { currencyId, imageName, ...rest } = createWalletDto;
 
     const currency: Currency = await this.currencyService.findOne(currencyId);
+    const image: Image = await this.imageService.findByName(imageName);
+
     const wallet = this.walletRepository.create({
       ...rest,
       currency,
+      image,
       user: req.user,
     });
 

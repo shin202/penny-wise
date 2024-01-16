@@ -7,7 +7,10 @@ import {
   Patch,
   Post,
   Req,
+  UploadedFile,
+  UseFilters,
   UseGuards,
+  UseInterceptors,
   Version,
 } from '@nestjs/common';
 import { WalletsService } from './wallets.service';
@@ -18,11 +21,18 @@ import { Request } from 'express';
 import { User } from '../users/entities/user.entity';
 import { Transform } from '../common/interceptors/transform.interface';
 import { Wallet } from './entities/wallet.entity';
+import { UploadService } from '../images/upload/upload.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerOptions, ParseFilePipe } from '../config';
+import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.filter';
 
 @Controller('wallets')
 @UseGuards(AuthGuard)
 export class WalletsController {
-  constructor(private readonly walletService: WalletsService) {}
+  constructor(
+    private readonly walletService: WalletsService,
+    private readonly uploadService: UploadService,
+  ) {}
 
   @Post()
   @Version('1')
@@ -97,5 +107,13 @@ export class WalletsController {
       message: 'Wallet deleted successfully',
       data: null,
     };
+  }
+
+  @Post('image')
+  @Version('1')
+  @UseInterceptors(FileInterceptor('image', multerOptions('wallets')))
+  @UseFilters(DeleteFileOnFailFilter)
+  async uploadImage(@UploadedFile(ParseFilePipe) file: Express.Multer.File) {
+    return this.uploadService.upload(file);
   }
 }

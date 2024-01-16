@@ -6,7 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseFilters,
   UseGuards,
+  UseInterceptors,
   Version,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
@@ -15,11 +18,18 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Transform } from '../common/interceptors/transform.interface';
 import { Category } from './entities/category.entity';
 import { AuthGuard } from '../auth/auth.guard';
+import { UploadService } from '../images/upload/upload.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerOptions, ParseFilePipe } from '../config';
+import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.filter';
 
 @Controller('categories')
 @UseGuards(AuthGuard)
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(
+    private readonly categoriesService: CategoriesService,
+    private readonly uploadService: UploadService,
+  ) {}
 
   @Post()
   @Version('1')
@@ -85,5 +95,13 @@ export class CategoriesController {
       message: 'Category deleted successfully',
       data: null,
     };
+  }
+
+  @Post('image')
+  @Version('1')
+  @UseInterceptors(FileInterceptor('image', multerOptions('categories')))
+  @UseFilters(DeleteFileOnFailFilter)
+  async uploadImage(@UploadedFile(ParseFilePipe) file: Express.Multer.File) {
+    return this.uploadService.upload(file);
   }
 }

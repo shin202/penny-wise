@@ -7,6 +7,7 @@ import {
 } from 'class-validator';
 import { IsExists } from '../../shared/validation/is-exists';
 import { Currency } from '../../currencies/entities/currency.entity';
+import { Image } from '../../images/entities/image.entity';
 
 export class CreateWalletDto {
   @IsString()
@@ -24,4 +25,9 @@ export class CreateWalletDto {
   @IsNumber()
   @IsNotEmpty()
   currencyId: number;
+
+  @IsExists(Image, 'name')
+  @IsString()
+  @IsNotEmpty()
+  imageName: string;
 }

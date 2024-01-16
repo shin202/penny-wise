@@ -3,12 +3,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryType } from '../category.interface';
 import { Transform } from 'class-transformer';
+import { Image } from '../../images/entities/image.entity';
 
 @Entity({ name: 'categories' })
 export class Category extends BaseEntity {
@@ -30,13 +33,24 @@ export class Category extends BaseEntity {
   @Transform(({ value }) => CategoryType[value])
   type: CategoryType;
 
-  @Column({ name: 'parent_id', type: 'int', nullable: true, default: null })
-  @Index()
-  parentId: number;
+  @ManyToOne(() => Category, (category) => category.children, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'parent_id' })
+  parent: Category;
+
+  @OneToMany(() => Category, (category) => category.parent)
+  children: Category[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @ManyToOne(() => Image, (image) => image.categories, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'image_id' })
+  image: Image;
 }

@@ -4,7 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
-import { globalConfig, jwtConfig, mailerConfig, typeormConfig } from './config';
+import {
+  globalConfig,
+  jwtConfig,
+  mailerConfig,
+  multerConfig,
+  typeormConfig,
+} from './config';
 import { IsExistsConstraint } from './shared/validation/is-exists.constraint';
 import { IsUniqueConstraint } from './shared/validation/is-unique.constraint';
 import { EmailVerificationModule } from './email-verification/email-verification.module';
@@ -15,7 +21,6 @@ import { WalletsModule } from './wallets/wallets.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ImagesModule } from './images/images.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { multerConfig } from './config';
 
 @Module({
   imports: [

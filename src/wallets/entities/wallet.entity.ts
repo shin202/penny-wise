@@ -12,6 +12,7 @@ import { User } from '../../users/entities/user.entity';
 import { WalletStatus } from '../wallet.interface';
 import { Transform } from 'class-transformer';
 import { Currency } from '../../currencies/entities/currency.entity';
+import { Image } from '../../images/entities/image.entity';
 
 @Entity({ name: 'wallets' })
 export class Wallet extends BaseEntity {
@@ -59,4 +60,10 @@ export class Wallet extends BaseEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @ManyToOne(() => Image, (image) => image.wallets, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'image_id' })
+  image: Image;
 }

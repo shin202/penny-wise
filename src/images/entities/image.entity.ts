@@ -2,11 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ImageType } from '../image.interface';
 import { Transform } from 'class-transformer';
+import { Category } from '../../categories/entities/category.entity';
+import { Wallet } from '../../wallets/entities/wallet.entity';
 
 @Entity({ name: 'images' })
 export class Image {
@@ -31,4 +34,10 @@ export class Image {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany(() => Category, (category) => category.image)
+  categories: Category[];
+
+  @OneToMany(() => Wallet, (wallet) => wallet.image)
+  wallets: Wallet[];
 }

@@ -10,5 +10,6 @@ import { StreamingService } from './streaming/streaming.service';
   imports: [TypeOrmModule.forFeature([Image])],
   controllers: [ImagesController],
   providers: [ImagesService, UploadService, StreamingService],
+  exports: [ImagesService, UploadService],
 })
 export class ImagesModule {}
