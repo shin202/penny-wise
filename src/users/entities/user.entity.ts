@@ -16,6 +16,7 @@ import * as dayjs from 'dayjs';
 import { PasswordUtils } from '../../utils';
 import { EmailVerifyToken } from '../../email-verify-tokens/entities/email-verify-token.entity';
 import { Wallet } from '../../wallets/entities/wallet.entity';
+import { Expense } from '../../expenses/entities/expense.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -64,6 +65,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Wallet, (wallet) => wallet.user)
   wallets: Wallet[];
+
+  @OneToMany(() => Expense, (expense) => expense.user)
+  expenses: Expense[];
 
   @BeforeInsert()
   hashPassword(): void {

@@ -21,6 +21,7 @@ import { WalletsModule } from './wallets/wallets.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ImagesModule } from './images/images.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { ExpensesModule } from './expenses/expenses.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { MulterModule } from '@nestjs/platform-express';
     WalletsModule,
     CategoriesModule,
     ImagesModule,
+    ExpensesModule,
   ],
   controllers: [],
   providers: [

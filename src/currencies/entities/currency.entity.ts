@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Wallet } from '../../wallets/entities/wallet.entity';
+import { Expense } from '../../expenses/entities/expense.entity';
 
 @Entity({ name: 'currencies' })
 export class Currency extends BaseEntity {
@@ -40,4 +41,7 @@ export class Currency extends BaseEntity {
 
   @OneToMany(() => Wallet, (wallet) => wallet.currency)
   wallets: Wallet[];
+
+  @OneToMany(() => Expense, (expense) => expense.currency)
+  expenses: Expense[];
 }

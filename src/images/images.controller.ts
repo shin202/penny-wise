@@ -6,6 +6,7 @@ import {
   Res,
   UploadedFile,
   UseFilters,
+  UseGuards,
   UseInterceptors,
   Version,
 } from '@nestjs/common';
@@ -15,8 +16,10 @@ import { multerOptions, ParseFilePipe } from '../config';
 import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.filter';
 import { StreamingService } from './streaming/streaming.service';
 import { Response } from 'express';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('images')
+@UseGuards(AuthGuard)
 export class ImagesController {
   constructor(
     private readonly uploadService: UploadService,

@@ -5,6 +5,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,6 +14,7 @@ import { WalletStatus } from '../wallet.interface';
 import { Transform } from 'class-transformer';
 import { Currency } from '../../currencies/entities/currency.entity';
 import { Image } from '../../images/entities/image.entity';
+import { Expense } from '../../expenses/entities/expense.entity';
 
 @Entity({ name: 'wallets' })
 export class Wallet extends BaseEntity {
@@ -66,4 +68,7 @@ export class Wallet extends BaseEntity {
   })
   @JoinColumn({ name: 'image_id' })
   image: Image;
+
+  @OneToMany(() => Expense, (expense) => expense.wallet)
+  expenses: Expense[];
 }

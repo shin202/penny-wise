@@ -23,6 +23,27 @@ export class UploadService {
     };
   }
 
+  async uploadMultiple(
+    files: Express.Multer.File[],
+  ): Promise<Transform<Image[]>> {
+    const images: Image[] = await Promise.all(
+      files.map(async (file: Express.Multer.File) => {
+        return await this.imageService.create({
+          name: file.filename,
+          mimeType: file.mimetype,
+          type: ImageType.IMAGE,
+          path: this.getImagePath(file.path),
+        });
+      }),
+    );
+
+    return {
+      status: 'success',
+      message: 'Images uploaded successfully',
+      data: images,
+    };
+  }
+
   private getImagePath(path: string): string {
     const pathRegex = /uploads\\(?:[\w]+)\\?(?:\w+)\.\w+$/;
 

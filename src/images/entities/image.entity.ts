@@ -2,6 +2,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -10,6 +12,7 @@ import { ImageType } from '../image.interface';
 import { Transform } from 'class-transformer';
 import { Category } from '../../categories/entities/category.entity';
 import { Wallet } from '../../wallets/entities/wallet.entity';
+import { Expense } from '../../expenses/entities/expense.entity';
 
 @Entity({ name: 'images' })
 export class Image {
@@ -40,4 +43,10 @@ export class Image {
 
   @OneToMany(() => Wallet, (wallet) => wallet.image)
   wallets: Wallet[];
+
+  @ManyToOne(() => Expense, (expense) => expense.images, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'expense_id' })
+  expense: Expense;
 }
