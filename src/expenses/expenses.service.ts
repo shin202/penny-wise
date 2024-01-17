@@ -6,9 +6,14 @@ import { Expense } from './entities/expense.entity';
 import { Repository } from 'typeorm';
 import { Request } from 'express';
 import { User } from '../users/entities/user.entity';
-import * as dayjs from 'dayjs';
 import { ImagesService } from '../images/images.service';
 import { Image } from '../images/entities/image.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import {
+  EXPENSE_CREATED,
+  EXPENSE_DELETED,
+  EXPENSE_UPDATED,
+} from '../shared/events.constant';
 
 @Injectable()
 export class ExpensesService {
@@ -16,6 +21,7 @@ export class ExpensesService {
     @InjectRepository(Expense)
     private readonly expenseRepository: Repository<Expense>,
     private readonly imageService: ImagesService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async create(
@@ -25,23 +31,22 @@ export class ExpensesService {
     const { walletId, categoryId, currencyId, imageNames, ...rest } =
       createExpenseDto;
 
-    const images: Image[] = await Promise.all(
-      imageNames.map(async (name) => {
-        return await this.imageService.findByName(name);
-      }),
-    );
+    const images: Image[] = await this.imageService.findInNames(imageNames);
 
     const expense: Expense = this.expenseRepository.create({
       category: { id: categoryId },
       currency: { id: currencyId },
       wallet: { id: walletId },
       user: { id: req.user.id },
-      transactionDate: dayjs().toDate(),
       images,
       ...rest,
     });
 
-    return this.expenseRepository.save(expense);
+    const savedExpense: Expense = await this.expenseRepository.save(expense);
+
+    this.eventEmitter.emit(EXPENSE_CREATED, savedExpense);
+
+    return savedExpense;
   }
 
   findAll(req: Request & { user: User }) {
@@ -70,11 +75,35 @@ export class ExpensesService {
     });
   }
 
-  update(id: number, updateExpenseDto: UpdateExpenseDto) {
-    return this.expenseRepository.update(id, updateExpenseDto);
+  async update(
+    id: number,
+    updateExpenseDto: UpdateExpenseDto,
+    req: Request & { user: User },
+  ) {
+    const { walletId, categoryId, currencyId, imageNames, ...rest } =
+      updateExpenseDto;
+
+    const images: Image[] = await this.imageService.findInNames(imageNames);
+
+    const expense: Expense = await this.findOne(id, req);
+
+    const savedExpense: Expense = await this.expenseRepository.save({
+      ...expense,
+      ...rest,
+      images,
+      category: { id: categoryId || expense.category.id },
+      currency: { id: currencyId || expense.currency.id },
+      wallet: { id: walletId || expense.wallet.id },
+      user: { id: req.user.id },
+    });
+
+    this.eventEmitter.emit(EXPENSE_UPDATED, savedExpense);
+
+    return savedExpense;
   }
 
-  remove(id: number) {
-    return this.expenseRepository.delete(id);
+  async remove(id: number) {
+    await this.expenseRepository.delete(id);
+    this.eventEmitter.emit(EXPENSE_DELETED, id);
   }
 }

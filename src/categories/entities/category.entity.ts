@@ -13,6 +13,8 @@ import { CategoryType } from '../category.interface';
 import { Transform } from 'class-transformer';
 import { Image } from '../../images/entities/image.entity';
 import { Expense } from '../../expenses/entities/expense.entity';
+import { Income } from '../../incomes/entities/income.entity';
+import { Transaction } from '../../transactions/entities/transaction.entity';
 
 @Entity({ name: 'categories' })
 export class Category extends BaseEntity {
@@ -57,4 +59,10 @@ export class Category extends BaseEntity {
 
   @OneToMany(() => Expense, (expense) => expense.category)
   expenses: Expense[];
+
+  @OneToMany(() => Income, (income) => income.category)
+  incomes: Income[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.category)
+  transactions: Transaction[];
 }

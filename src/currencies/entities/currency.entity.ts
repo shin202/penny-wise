@@ -9,6 +9,8 @@ import {
 } from 'typeorm';
 import { Wallet } from '../../wallets/entities/wallet.entity';
 import { Expense } from '../../expenses/entities/expense.entity';
+import { Income } from '../../incomes/entities/income.entity';
+import { Transaction } from '../../transactions/entities/transaction.entity';
 
 @Entity({ name: 'currencies' })
 export class Currency extends BaseEntity {
@@ -44,4 +46,10 @@ export class Currency extends BaseEntity {
 
   @OneToMany(() => Expense, (expense) => expense.currency)
   expenses: Expense[];
+
+  @OneToMany(() => Income, (income) => income.currency)
+  incomes: Income[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.currency)
+  transactions: Transaction[];
 }

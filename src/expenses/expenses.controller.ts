@@ -72,13 +72,18 @@ export class ExpensesController {
   async update(
     @Param('id') id: string,
     @Body() updateExpenseDto: UpdateExpenseDto,
+    @Req() req: Request & { user: User },
   ) {
-    await this.expensesService.update(+id, updateExpenseDto);
+    const expense = await this.expensesService.update(
+      +id,
+      updateExpenseDto,
+      req,
+    );
 
     return {
       status: 'success',
       message: 'Expense updated successfully',
-      data: null,
+      data: expense,
     };
   }
 

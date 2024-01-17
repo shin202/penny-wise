@@ -13,6 +13,7 @@ import { Transform } from 'class-transformer';
 import { Category } from '../../categories/entities/category.entity';
 import { Wallet } from '../../wallets/entities/wallet.entity';
 import { Expense } from '../../expenses/entities/expense.entity';
+import { Income } from '../../incomes/entities/income.entity';
 
 @Entity({ name: 'images' })
 export class Image {
@@ -49,4 +50,10 @@ export class Image {
   })
   @JoinColumn({ name: 'expense_id' })
   expense: Expense;
+
+  @ManyToOne(() => Income, (income) => income.images, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'income_id' })
+  income: Income;
 }

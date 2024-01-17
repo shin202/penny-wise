@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateImageDto } from './dto/create-image.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Image } from './entities/image.entity';
 
 @Injectable()
@@ -18,6 +18,14 @@ export class ImagesService {
   findByName(name: string): Promise<Image> {
     return this.imageRepository.findOne({
       where: { name },
+    });
+  }
+
+  findInNames(names: string[]): Promise<Image[]> {
+    return this.imageRepository.find({
+      where: {
+        name: In(names),
+      },
     });
   }
 }

@@ -22,6 +22,9 @@ import { CategoriesModule } from './categories/categories.module';
 import { ImagesModule } from './images/images.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ExpensesModule } from './expenses/expenses.module';
+import { IncomesModule } from './incomes/incomes.module';
+import { TransactionsModule } from './transactions/transactions.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -44,6 +47,7 @@ import { ExpensesModule } from './expenses/expenses.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => configService.get('multer'),
     }),
+    EventEmitterModule.forRoot(),
     CommonModule,
     AuthModule,
     EmailVerificationModule,
@@ -53,6 +57,8 @@ import { ExpensesModule } from './expenses/expenses.module';
     CategoriesModule,
     ImagesModule,
     ExpensesModule,
+    IncomesModule,
+    TransactionsModule,
   ],
   controllers: [],
   providers: [

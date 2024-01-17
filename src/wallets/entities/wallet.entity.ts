@@ -15,6 +15,8 @@ import { Transform } from 'class-transformer';
 import { Currency } from '../../currencies/entities/currency.entity';
 import { Image } from '../../images/entities/image.entity';
 import { Expense } from '../../expenses/entities/expense.entity';
+import { Income } from '../../incomes/entities/income.entity';
+import { Transaction } from '../../transactions/entities/transaction.entity';
 
 @Entity({ name: 'wallets' })
 export class Wallet extends BaseEntity {
@@ -71,4 +73,10 @@ export class Wallet extends BaseEntity {
 
   @OneToMany(() => Expense, (expense) => expense.wallet)
   expenses: Expense[];
+
+  @OneToMany(() => Income, (income) => income.wallet)
+  incomes: Income[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.wallet)
+  transactions: Transaction[];
 }

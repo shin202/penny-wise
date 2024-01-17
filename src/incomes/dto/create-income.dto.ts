@@ -1,7 +1,6 @@
 import { IsExists } from '../../shared/validation/is-exists';
 import { Wallet } from '../../wallets/entities/wallet.entity';
 import {
-  IsDate,
   IsDateString,
   IsDecimal,
   IsNotEmpty,
@@ -11,7 +10,7 @@ import {
 import { Currency } from '../../currencies/entities/currency.entity';
 import { Category } from '../../categories/entities/category.entity';
 
-export class CreateExpenseDto {
+export class CreateIncomeDto {
   @IsExists(Wallet, 'id')
   @IsNumber()
   @IsNotEmpty()
@@ -31,12 +30,12 @@ export class CreateExpenseDto {
   @IsNotEmpty()
   amount: number;
 
-  @IsOptional()
-  notes?: string;
-
   @IsDateString()
   @IsNotEmpty()
   transactionDate: Date;
+
+  @IsOptional()
+  notes: string;
 
   @IsOptional()
   imageNames?: string[] = [];

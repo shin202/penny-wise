@@ -17,6 +17,8 @@ import { PasswordUtils } from '../../utils';
 import { EmailVerifyToken } from '../../email-verify-tokens/entities/email-verify-token.entity';
 import { Wallet } from '../../wallets/entities/wallet.entity';
 import { Expense } from '../../expenses/entities/expense.entity';
+import { Income } from '../../incomes/entities/income.entity';
+import { Transaction } from '../../transactions/entities/transaction.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -68,6 +70,12 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Expense, (expense) => expense.user)
   expenses: Expense[];
+
+  @OneToMany(() => Income, (income) => income.user)
+  incomes: Income[];
+
+  @OneToMany(() => Transaction, (transaction) => transaction.user)
+  transactions: Transaction[];
 
   @BeforeInsert()
   hashPassword(): void {
