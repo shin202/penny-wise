@@ -8,6 +8,12 @@ import { Image } from '../images/entities/image.entity';
 import { ImagesService } from '../images/images.service';
 import { Request } from 'express';
 import { User } from '../users/entities/user.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import {
+  INCOME_CREATED,
+  INCOME_DELETED,
+  INCOME_UPDATED,
+} from '../common/constants/events.constant';
 
 @Injectable()
 export class IncomesService {
@@ -15,27 +21,32 @@ export class IncomesService {
     @InjectRepository(Income)
     private readonly incomeRepository: Repository<Income>,
     private readonly imageService: ImagesService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async create(createIncomeDto: CreateIncomeDto) {
+  async create(
+    createIncomeDto: CreateIncomeDto,
+    req: Request & { user: User },
+  ) {
     const { walletId, categoryId, currencyId, imageNames, ...rest } =
       createIncomeDto;
 
-    const images: Image[] = await Promise.all(
-      imageNames.map(async (name) => {
-        return await this.imageService.findByName(name);
-      }),
-    );
+    const images: Image[] = await this.imageService.findInNames(imageNames);
 
     const income: Income = this.incomeRepository.create({
       category: { id: categoryId },
       currency: { id: currencyId },
       wallet: { id: walletId },
+      user: { id: req.user.id },
       images,
       ...rest,
     });
 
-    return this.incomeRepository.save(income);
+    const savedIncome: Income = await this.incomeRepository.save(income);
+
+    this.eventEmitter.emit(INCOME_CREATED, savedIncome);
+
+    return savedIncome;
   }
 
   findAll(req: Request & { user: User }) {
@@ -57,6 +68,7 @@ export class IncomesService {
         user: { username: req.user.username },
       },
       relations: {
+        wallet: true,
         currency: true,
         category: true,
         images: true,
@@ -64,11 +76,35 @@ export class IncomesService {
     });
   }
 
-  update(id: number, updateIncomeDto: UpdateIncomeDto) {
-    return this.incomeRepository.update(id, updateIncomeDto);
+  async update(
+    id: number,
+    updateIncomeDto: UpdateIncomeDto,
+    req: Request & { user: User },
+  ) {
+    const { walletId, categoryId, currencyId, imageNames, ...rest } =
+      updateIncomeDto;
+
+    const images: Image[] = await this.imageService.findInNames(imageNames);
+
+    const income: Income = await this.findOne(id, req);
+
+    const savedIncome: Income = await this.incomeRepository.save({
+      ...income,
+      ...rest,
+      images,
+      wallet: { id: walletId || income.wallet.id },
+      category: { id: categoryId || income.category.id },
+      currency: { id: currencyId || income.currency.id },
+      user: { id: req.user.id },
+    });
+
+    this.eventEmitter.emit(INCOME_UPDATED, savedIncome);
+
+    return savedIncome;
   }
 
-  remove(id: number) {
-    return this.incomeRepository.delete(id);
+  async remove(id: number) {
+    await this.incomeRepository.delete(id);
+    this.eventEmitter.emit(INCOME_DELETED, id);
   }
 }

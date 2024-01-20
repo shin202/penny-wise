@@ -14,6 +14,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersModule } from '../users/users.module';
 import { ImagesModule } from '../images/images.module';
+import { TransformQueryParamsService } from './providers/transform-query-params.service';
+import { ConvertCurrencyService } from './providers/convert-currency.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Global()
 @Module({
@@ -26,8 +29,17 @@ import { ImagesModule } from '../images/images.module';
     MailModule,
     EmailVerifyTokensModule,
     ImagesModule,
+    HttpModule,
   ],
-  exports: [JwtModule, MailModule, UsersModule, ImagesModule],
+  providers: [TransformQueryParamsService, ConvertCurrencyService],
+  exports: [
+    JwtModule,
+    MailModule,
+    UsersModule,
+    ImagesModule,
+    TransformQueryParamsService,
+    ConvertCurrencyService,
+  ],
 })
 export class CommonModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

@@ -5,3 +5,4 @@ export * from './mailer.config';
 export * from './jwt.config';
 export * from './multer.config';
 export * from './validation-pipe.config';
+export * from './http-request.config';

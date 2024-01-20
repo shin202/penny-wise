@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import {
   globalConfig,
+  httpConfig,
   jwtConfig,
   mailerConfig,
   multerConfig,
@@ -25,6 +26,7 @@ import { ExpensesModule } from './expenses/expenses.module';
 import { IncomesModule } from './incomes/incomes.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -36,6 +38,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
         mailerConfig,
         jwtConfig,
         multerConfig,
+        httpConfig,
       ],
     }),
     TypeOrmModule.forRootAsync({
@@ -48,6 +51,10 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       useFactory: (configService: ConfigService) => configService.get('multer'),
     }),
     EventEmitterModule.forRoot(),
+    HttpModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => configService.get('http'),
+    }),
     CommonModule,
     AuthModule,
     EmailVerificationModule,

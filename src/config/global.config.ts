@@ -9,4 +9,5 @@ export const globalConfig = () => ({
   passwordResetEndpoint:
     process.env.PASSWORD_RESET_ENDPOINT || '/api/v1/password/reset',
   refreshTokenTtl: +process.env.REFRESH_TOKEN_TTL || 604800,
+  currencyBeaconApiKey: process.env.CURRENCY_BEACON_API_KEY,
 });

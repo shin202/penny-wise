@@ -13,7 +13,7 @@ import {
   EXPENSE_CREATED,
   EXPENSE_DELETED,
   EXPENSE_UPDATED,
-} from '../shared/events.constant';
+} from '../common/constants/events.constant';
 
 @Injectable()
 export class ExpensesService {
@@ -68,6 +68,7 @@ export class ExpensesService {
         user: { username: req.user.username },
       },
       relations: {
+        wallet: true,
         currency: true,
         category: true,
         images: true,

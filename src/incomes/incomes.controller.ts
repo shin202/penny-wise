@@ -37,8 +37,12 @@ export class IncomesController {
   @Post()
   async create(
     @Body() createIncomeDto: CreateIncomeDto,
+    @Req() req: Request & { user: User },
   ): Promise<Transform<Income>> {
-    const income: Income = await this.incomesService.create(createIncomeDto);
+    const income: Income = await this.incomesService.create(
+      createIncomeDto,
+      req,
+    );
 
     return {
       status: 'success',
@@ -78,13 +82,18 @@ export class IncomesController {
   async update(
     @Param('id') id: string,
     @Body() updateIncomeDto: UpdateIncomeDto,
+    @Req() req: Request & { user: User },
   ): Promise<Transform<any>> {
-    await this.incomesService.update(+id, updateIncomeDto);
+    const income: Income = await this.incomesService.update(
+      +id,
+      updateIncomeDto,
+      req,
+    );
 
     return {
       status: 'success',
       message: 'Income updated successfully.',
-      data: null,
+      data: income,
     };
   }
 
