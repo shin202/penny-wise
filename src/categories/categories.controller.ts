@@ -61,7 +61,7 @@ export class CategoriesController {
   @Get(':id')
   @Version('1')
   async findOne(@Param('id') id: string): Promise<Transform<Category>> {
-    const category: Category = await this.categoriesService.findOne(+id);
+    const category: Category = await this.categoriesService.findOneOrFail(+id);
 
     return {
       status: 'success',
@@ -76,7 +76,7 @@ export class CategoriesController {
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    await this.categoriesService.update(+id, updateCategoryDto);
+    await this.categoriesService.updateOrFail(+id, updateCategoryDto);
 
     return {
       status: 'success',
@@ -87,8 +87,8 @@ export class CategoriesController {
 
   @Delete(':id')
   @Version('1')
-  async remove(@Param('id') id: string) {
-    await this.categoriesService.remove(+id);
+  async destroy(@Param('id') id: string) {
+    await this.categoriesService.deleteOrFail(+id);
 
     return {
       status: 'success',
