@@ -7,6 +7,9 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryType } from '../category.interface';
@@ -17,6 +20,7 @@ import { Income } from '../../incomes/entities/income.entity';
 import { Transaction } from '../../transactions/entities/transaction.entity';
 
 @Entity({ name: 'categories' })
+@Tree('closure-table')
 export class Category extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -36,13 +40,11 @@ export class Category extends BaseEntity {
   @Transform(({ value }) => CategoryType[value])
   type: CategoryType;
 
-  @ManyToOne(() => Category, (category) => category.children, {
-    onDelete: 'CASCADE',
-  })
+  @TreeParent({ onDelete: 'CASCADE' })
   @JoinColumn({ name: 'parent_id' })
   parent: Category;
 
-  @OneToMany(() => Category, (category) => category.parent)
+  @TreeChildren()
   children: Category[];
 
   @CreateDateColumn({ name: 'created_at' })
