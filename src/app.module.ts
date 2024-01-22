@@ -26,7 +26,6 @@ import { ExpensesModule } from './expenses/expenses.module';
 import { IncomesModule } from './incomes/incomes.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -51,10 +50,6 @@ import { HttpModule } from '@nestjs/axios';
       useFactory: (configService: ConfigService) => configService.get('multer'),
     }),
     EventEmitterModule.forRoot(),
-    HttpModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => configService.get('http'),
-    }),
     CommonModule,
     AuthModule,
     EmailVerificationModule,

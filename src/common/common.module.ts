@@ -10,26 +10,29 @@ import { VerifyTemporaryUrlMiddleware } from './middlewares/verify-temporary-url
 import { EmailVerificationController } from '../email-verification/email-verification.controller';
 import { EmailVerifyTokensModule } from '../email-verify-tokens/email-verify-tokens.module';
 import { PasswordResetsController } from '../password-resets/password-resets.controller';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { UsersModule } from '../users/users.module';
 import { ImagesModule } from '../images/images.module';
 import { TransformQueryParamsService } from './providers/transform-query-params.service';
 import { ConvertCurrencyService } from './providers/convert-currency.service';
 import { HttpModule } from '@nestjs/axios';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Global()
 @Module({
   imports: [
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => configService.get('jwt'),
-    }),
     UsersModule,
     MailModule,
     EmailVerifyTokensModule,
     ImagesModule,
-    HttpModule,
+    HttpModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => configService.get('http'),
+    }),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => configService.get('jwt'),
+    }),
   ],
   providers: [TransformQueryParamsService, ConvertCurrencyService],
   exports: [
