@@ -17,22 +17,22 @@ import Button from 'primevue/button'
           <div class="form__group">
             <label for="username-or-email" class="login-form__label">Username or email</label>
             <InputText id="username-or-email" type="text" placeholder="Enter your username or email"
-                       class="login-form__input" />
-            <small class="form__validation-error" id="username-or-email-help">Error</small>
+                       class="form__input" color="blue" />
+            <small class="form__validation-error" id="username-or-email-help" />
           </div>
           <div class="form__group">
             <label for="password" class="form__label">Password</label>
             <Password id="password" :feedback="false" toggle-mask placeholder="Enter your password"
                       class="form__input" />
-            <small class="form__validation-error" id="username-or-email-help">Error</small>
+            <small class="form__validation-error" id="password-help" />
           </div>
           <div class="text-gray-600 self-end">
-            <RouterLink to="/forgot-password" class="text-blue-500 hover:underline">Forgot your password?</RouterLink>
+            <RouterLink to="/forgot-password" class="text-primary-500 hover:underline">Forgot your password?</RouterLink>
           </div>
-          <Button label="Login" severity="info" class="mt-[1.2rem!important]" />
+          <Button label="Login" class="mt-[1.2rem!important]" />
           <div class="text-gray-600">
             Don't have an account?
-            <RouterLink to="/register" class="text-blue-500 hover:underline">Register</RouterLink>
+            <RouterLink to="/register" class="text-primary-500 hover:underline">Register</RouterLink>
           </div>
         </div>
       </div>
@@ -46,34 +46,6 @@ import Button from 'primevue/button'
 
   &__inner {
     @apply md:max-w-[30rem] mt-10 flex flex-col mx-auto bg-white drop-shadow-md rounded;
-  }
-}
-
-.form {
-  @apply flex flex-col px-6 py-4;
-
-  &__header {
-    @apply font-bold text-base md:text-lg text-center truncate self-start;
-  }
-
-  &__body {
-    @apply mt-6 flex flex-col space-y-1.5;
-  }
-
-  &__group {
-    @apply flex flex-col space-y-1;
-  }
-
-  &__label {
-    @apply text-sm font-semibold text-gray-700;
-  }
-
-  &__input {
-    @apply w-full;
-  }
-
-  &__validation-error {
-    @apply text-xs text-red-500;
   }
 }
 </style>

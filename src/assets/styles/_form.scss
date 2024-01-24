@@ -1,0 +1,29 @@
+@layer components {
+  .form {
+    @apply flex flex-col px-6 py-4;
+
+    &__header {
+      @apply font-bold text-base md:text-lg text-center self-start;
+    }
+
+    &__body {
+      @apply mt-6 flex flex-col space-y-1.5;
+    }
+
+    &__group {
+      @apply flex flex-col space-y-1;
+    }
+
+    &__label {
+      @apply text-sm font-semibold text-gray-700;
+    }
+
+    &__input {
+      @apply w-full;
+    }
+
+    &__validation-error {
+      @apply text-xs text-red-500;
+    }
+  }
+}
