@@ -3,6 +3,7 @@ import { CreateImageDto } from './dto/create-image.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Image } from './entities/image.entity';
+import { ImageType } from './image.interface';
 
 @Injectable()
 export class ImagesService {
@@ -26,6 +27,12 @@ export class ImagesService {
       where: {
         name: In(names),
       },
+    });
+  }
+
+  findAllIcons(): Promise<Image[]> {
+    return this.imageRepository.find({
+      where: { type: ImageType.ICON },
     });
   }
 }

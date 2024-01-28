@@ -8,11 +8,14 @@ import { Transform } from '../../common/interceptors/transform.interface';
 export class UploadService {
   constructor(private readonly imageService: ImagesService) {}
 
-  async upload(file: Express.Multer.File): Promise<Transform<Image>> {
+  async upload(
+    file: Express.Multer.File,
+    imageType: ImageType = ImageType.IMAGE,
+  ): Promise<Transform<Image>> {
     const image: Image = await this.imageService.create({
       name: file.filename,
       mimeType: file.mimetype,
-      type: ImageType.IMAGE,
+      type: imageType,
       path: this.getImagePath(file.path),
     });
 

@@ -17,6 +17,8 @@ import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.fi
 import { StreamingService } from './streaming/streaming.service';
 import { Response } from 'express';
 import { AuthGuard } from '../auth/auth.guard';
+import { ImageType } from './image.interface';
+import { IconsService } from './icons/icons.service';
 
 @Controller('images')
 @UseGuards(AuthGuard)
@@ -24,6 +26,7 @@ export class ImagesController {
   constructor(
     private readonly uploadService: UploadService,
     private readonly streamingService: StreamingService,
+    private readonly iconService: IconsService,
   ) {}
 
   @Post()
@@ -34,7 +37,7 @@ export class ImagesController {
     @UploadedFile(ParseFilePipe)
     image: Express.Multer.File,
   ) {
-    return this.uploadService.upload(image);
+    return this.uploadService.upload(image, ImageType.ICON);
   }
 
   @Get(':name')
@@ -44,5 +47,11 @@ export class ImagesController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return this.streamingService.streaming(name, res);
+  }
+
+  @Get('icons')
+  @Version('1')
+  findAllIcons() {
+    return this.iconService.findAll();
   }
 }
