@@ -28,13 +28,14 @@ export class UploadService {
 
   async uploadMultiple(
     files: Express.Multer.File[],
+    imageType: ImageType = ImageType.IMAGE,
   ): Promise<Transform<Image[]>> {
     const images: Image[] = await Promise.all(
       files.map(async (file: Express.Multer.File) => {
         return await this.imageService.create({
           name: file.filename,
           mimeType: file.mimetype,
-          type: ImageType.IMAGE,
+          type: imageType,
           path: this.getImagePath(file.path),
         });
       }),

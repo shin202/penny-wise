@@ -5,13 +5,14 @@ import {
   Post,
   Res,
   UploadedFile,
+  UploadedFiles,
   UseFilters,
   UseGuards,
   UseInterceptors,
   Version,
 } from '@nestjs/common';
 import { UploadService } from './upload/upload.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions, ParseFilePipe } from '../config';
 import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.filter';
 import { StreamingService } from './streaming/streaming.service';
@@ -31,13 +32,13 @@ export class ImagesController {
 
   @Post()
   @Version('1')
-  @UseInterceptors(FileInterceptor('image', multerOptions()))
+  @UseInterceptors(FilesInterceptor('images', 5, multerOptions('icons')))
   @UseFilters(DeleteFileOnFailFilter)
   upload(
-    @UploadedFile(ParseFilePipe)
-    image: Express.Multer.File,
+    @UploadedFiles(ParseFilePipe)
+    images: Array<Express.Multer.File>,
   ) {
-    return this.uploadService.upload(image, ImageType.ICON);
+    return this.uploadService.uploadMultiple(images, ImageType.ICON);
   }
 
   @Get(':name')
