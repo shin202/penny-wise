@@ -4,7 +4,6 @@ import {
   Param,
   Post,
   Res,
-  UploadedFile,
   UploadedFiles,
   UseFilters,
   UseGuards,
@@ -12,7 +11,7 @@ import {
   Version,
 } from '@nestjs/common';
 import { UploadService } from './upload/upload.service';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions, ParseFilePipe } from '../config';
 import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.filter';
 import { StreamingService } from './streaming/streaming.service';
@@ -22,7 +21,6 @@ import { ImageType } from './image.interface';
 import { IconsService } from './icons/icons.service';
 
 @Controller('images')
-@UseGuards(AuthGuard)
 export class ImagesController {
   constructor(
     private readonly uploadService: UploadService,
@@ -32,6 +30,7 @@ export class ImagesController {
 
   @Post()
   @Version('1')
+  @UseGuards(AuthGuard)
   @UseInterceptors(FilesInterceptor('images', 5, multerOptions('icons')))
   @UseFilters(DeleteFileOnFailFilter)
   upload(
@@ -41,6 +40,12 @@ export class ImagesController {
     return this.uploadService.uploadMultiple(images, ImageType.ICON);
   }
 
+  @Get('icons')
+  @Version('1')
+  findAllIcons() {
+    return this.iconService.findAll();
+  }
+
   @Get(':name')
   @Version('1')
   getImage(
@@ -48,11 +53,5 @@ export class ImagesController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return this.streamingService.streaming(name, res);
-  }
-
-  @Get('icons')
-  @Version('1')
-  findAllIcons() {
-    return this.iconService.findAll();
   }
 }
