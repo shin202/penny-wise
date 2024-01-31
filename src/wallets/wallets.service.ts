@@ -24,9 +24,10 @@ export class WalletsService {
     createWalletDto: CreateWalletDto,
     req: Request & { user: User },
   ): Promise<Wallet> {
-    const { currencyId, imageName, ...rest } = createWalletDto;
+    const { currencyCode, imageName, ...rest } = createWalletDto;
 
-    const currency: Currency = await this.currencyService.findOne(currencyId);
+    const currency: Currency =
+      await this.currencyService.findByCode(currencyCode);
     const image: Image = await this.imageService.findByName(imageName);
 
     const wallet = this.walletRepository.create({
@@ -48,12 +49,44 @@ export class WalletsService {
       },
       relations: {
         currency: true,
+        image: true,
       },
       select: {
         id: true,
         name: true,
         balance: true,
         status: true,
+        currency: {
+          name: true,
+          symbol: true,
+          code: true,
+        },
+        image: {
+          name: true,
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  findOrFail(id: number) {
+    return this.walletRepository.findOneOrFail({
+      where: { id },
+      relations: {
+        user: true,
+        currency: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        balance: true,
+        description: true,
+        status: true,
+        user: {
+          id: true,
+          username: true,
+        },
         currency: {
           name: true,
           symbol: true,
@@ -98,9 +131,10 @@ export class WalletsService {
     updateWalletDto: UpdateWalletDto,
     req: Request & { user: User },
   ) {
-    const { currencyId, ...rest } = updateWalletDto;
+    const { currencyCode, ...rest } = updateWalletDto;
 
-    const currency: Currency = await this.currencyService.findOne(currencyId);
+    const currency: Currency =
+      await this.currencyService.findByCode(currencyCode);
 
     return this.walletRepository
       .createQueryBuilder()

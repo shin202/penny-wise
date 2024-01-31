@@ -68,8 +68,8 @@ export class WalletsController {
 
   @Get(':id')
   @Version('1')
-  async findOne(@Param('id') id: string, @Req() req: Request & { user: User }) {
-    const wallet: Wallet = await this.walletService.findOne(+id, req);
+  async findOne(@Param('id') id: string) {
+    const wallet: Wallet = await this.walletService.findOrFail(+id);
 
     return {
       status: 'success',

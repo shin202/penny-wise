@@ -29,6 +29,12 @@ export class CurrenciesService {
     });
   }
 
+  findByCode(code: string): Promise<Currency> {
+    return this.currencyRepository.findOne({
+      where: { code },
+    });
+  }
+
   update(id: number, updateCurrencyDto: UpdateCurrencyDto) {
     return this.currencyRepository.update(id, updateCurrencyDto);
   }

@@ -21,10 +21,10 @@ export class CreateWalletDto {
   @IsOptional()
   description?: string;
 
-  @IsExists(Currency, 'id')
-  @IsNumber()
+  @IsExists(Currency, 'code')
+  @IsString()
   @IsNotEmpty()
-  currencyId: number;
+  currencyCode: string;
 
   @IsExists(Image, 'name')
   @IsString()
