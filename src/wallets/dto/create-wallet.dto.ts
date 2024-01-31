@@ -1,10 +1,4 @@
-import {
-  IsDecimal,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsDecimal, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { IsExists } from '../../shared/validation/is-exists';
 import { Currency } from '../../currencies/entities/currency.entity';
 import { Image } from '../../images/entities/image.entity';

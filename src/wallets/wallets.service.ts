@@ -37,7 +37,7 @@ export class WalletsService {
       user: req.user,
     });
 
-    return await this.walletRepository.save(wallet);
+    return this.walletRepository.save(wallet);
   }
 
   findAll(req: Request & { user: User }): Promise<Wallet[]> {
@@ -76,6 +76,7 @@ export class WalletsService {
       relations: {
         user: true,
         currency: true,
+        image: true,
       },
       select: {
         id: true,
@@ -91,6 +92,9 @@ export class WalletsService {
           name: true,
           symbol: true,
           code: true,
+        },
+        image: {
+          name: true,
         },
         createdAt: true,
         updatedAt: true,
@@ -131,21 +135,21 @@ export class WalletsService {
     updateWalletDto: UpdateWalletDto,
     req: Request & { user: User },
   ) {
-    const { currencyCode, ...rest } = updateWalletDto;
+    const { imageName, currencyCode, ...rest } = updateWalletDto;
 
-    const currency: Currency =
-      await this.currencyService.findByCode(currencyCode);
+    const currency: Currency = currencyCode
+      ? await this.currencyService.findByCode(currencyCode)
+      : undefined;
 
-    return this.walletRepository
-      .createQueryBuilder()
-      .update(Wallet)
-      .set({
-        ...rest,
-        currency,
-      })
-      .where('id = :id', { id })
-      .andWhere('user_id', { user_id: req.user.id })
-      .execute();
+    const image: Image = imageName
+      ? await this.imageService.findByName(imageName)
+      : undefined;
+
+    return this.walletRepository.update(id, {
+      ...rest,
+      currency,
+      image,
+    });
   }
 
   remove(id: number, req: Request & { user: User }) {
