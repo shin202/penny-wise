@@ -17,6 +17,7 @@ import { ConvertCurrencyService } from './providers/convert-currency.service';
 import { HttpModule } from '@nestjs/axios';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { AbilityFactory } from './providers/ability.factory';
 
 @Global()
 @Module({
@@ -34,7 +35,11 @@ import { ConfigService } from '@nestjs/config';
       useFactory: (configService: ConfigService) => configService.get('jwt'),
     }),
   ],
-  providers: [TransformQueryParamsService, ConvertCurrencyService],
+  providers: [
+    TransformQueryParamsService,
+    ConvertCurrencyService,
+    AbilityFactory,
+  ],
   exports: [
     JwtModule,
     MailModule,
@@ -42,6 +47,7 @@ import { ConfigService } from '@nestjs/config';
     ImagesModule,
     TransformQueryParamsService,
     ConvertCurrencyService,
+    AbilityFactory,
   ],
 })
 export class CommonModule implements NestModule {

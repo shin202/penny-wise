@@ -23,7 +23,7 @@
     "migration:generate": "npm run typeorm migration:generate ./src/database/migrations/%npm_config_name%",
     "migration:create": "typeorm-ts-node-esm migration:create ./src/database/migrations/%npm_config_name%",
     "migration:revert": "npm run typeorm migration:revert",
-    "migration:fresh": "npm run db:drop && npm run db:create && npm run db:seed",
+    "migration:fresh": "npm run db:drop && npm run db:create",
     "db:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs db:create -d src/config/typeorm.config.ts",
     "db:drop": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs db:drop -d src/config/typeorm.config.ts",
     "db:seed": "npm run seed:run --name=database",
@@ -31,6 +31,7 @@
     "seed:run": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/config/typeorm.config.ts --name ./src/database/seeders/%npm_config_name%.seeder.ts"
   },
   "dependencies": {
+    "@casl/ability": "^6.5.0",
     "@nestjs-modules/mailer": "^1.10.3",
     "@nestjs/axios": "^3.0.1",
     "@nestjs/common": "^10.0.0",
