@@ -19,6 +19,7 @@ export class CreateCategoryDto {
   description?: string;
 
   @IsEnum(CategoryType)
+  @IsNotEmpty()
   type: CategoryType;
 
   @IsExists(Category, 'id')

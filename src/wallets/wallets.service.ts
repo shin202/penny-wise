@@ -102,39 +102,7 @@ export class WalletsService {
     });
   }
 
-  findOne(id: number, req: Request & { user: User }) {
-    return this.walletRepository.findOne({
-      where: {
-        id,
-        user: {
-          username: req.user.username,
-        },
-      },
-      relations: {
-        currency: true,
-      },
-      select: {
-        id: true,
-        name: true,
-        balance: true,
-        description: true,
-        status: true,
-        currency: {
-          name: true,
-          symbol: true,
-          code: true,
-        },
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
-  }
-
-  async update(
-    id: number,
-    updateWalletDto: UpdateWalletDto,
-    req: Request & { user: User },
-  ) {
+  async update(id: number, updateWalletDto: UpdateWalletDto) {
     const { imageName, currencyCode, ...rest } = updateWalletDto;
 
     const currency: Currency = currencyCode
@@ -152,13 +120,7 @@ export class WalletsService {
     });
   }
 
-  remove(id: number, req: Request & { user: User }) {
-    return this.walletRepository
-      .createQueryBuilder()
-      .delete()
-      .from(Wallet)
-      .where('id = :id', { id })
-      .andWhere('user_id', { user_id: req.user.id })
-      .execute();
+  remove(id: number) {
+    return this.walletRepository.delete(id);
   }
 }

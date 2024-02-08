@@ -13,7 +13,7 @@ import {
   EXPENSE_CREATED,
   EXPENSE_DELETED,
   EXPENSE_UPDATED,
-} from '../common/constants/events.constant';
+} from '../common/constants';
 
 @Injectable()
 export class ExpensesService {
@@ -61,41 +61,71 @@ export class ExpensesService {
     });
   }
 
-  findOne(id: number, req: Request & { user: User }) {
-    return this.expenseRepository.findOne({
+  findOneOrFail(id: number) {
+    return this.expenseRepository.findOneOrFail({
       where: {
         id,
-        user: { username: req.user.username },
       },
       relations: {
+        user: true,
         wallet: true,
         currency: true,
         category: true,
         images: true,
       },
+      select: {
+        id: true,
+        amount: true,
+        notes: true,
+        transactionDate: true,
+        wallet: {
+          id: true,
+          name: true,
+        },
+        currency: {
+          id: true,
+          name: true,
+          code: true,
+        },
+        category: {
+          id: true,
+          name: true,
+        },
+        images: {
+          id: true,
+          name: true,
+        },
+        user: {
+          id: true,
+          username: true,
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 
-  async update(
-    id: number,
-    updateExpenseDto: UpdateExpenseDto,
-    req: Request & { user: User },
-  ) {
+  async update(id: number, updateExpenseDto: UpdateExpenseDto) {
     const { walletId, categoryId, currencyId, imageNames, ...rest } =
       updateExpenseDto;
 
-    const images: Image[] = await this.imageService.findInNames(imageNames);
+    const expense: Expense = await this.findOneOrFail(id);
 
-    const expense: Expense = await this.findOne(id, req);
+    const images: Image[] = imageNames
+      ? await this.imageService.findInNames(imageNames)
+      : undefined;
+
+    const category = categoryId ? { id: categoryId } : undefined;
+    const currency = currencyId ? { id: currencyId } : undefined;
+    const wallet = walletId ? { id: walletId } : undefined;
 
     const savedExpense: Expense = await this.expenseRepository.save({
       ...expense,
       ...rest,
       images,
-      category: { id: categoryId || expense.category.id },
-      currency: { id: currencyId || expense.currency.id },
-      wallet: { id: walletId || expense.wallet.id },
-      user: { id: req.user.id },
+      category,
+      currency,
+      wallet,
     });
 
     this.eventEmitter.emit(EXPENSE_UPDATED, savedExpense);

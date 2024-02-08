@@ -4,12 +4,13 @@ import {
   EXPENSE_CREATED,
   EXPENSE_DELETED,
   EXPENSE_UPDATED,
-} from '../../common/constants/events.constant';
+} from '../../common/constants';
 import { OnEvent } from '@nestjs/event-emitter';
 import { Expense } from '../../expenses/entities/expense.entity';
+import { TransactionType } from '../transaction.interface';
 
 @Injectable()
-export class ExpenseService {
+export class ExpenseTransactionService {
   constructor(private readonly transactionService: TransactionsService) {}
 
   @OnEvent(EXPENSE_CREATED)
@@ -19,11 +20,11 @@ export class ExpenseService {
 
   @OnEvent(EXPENSE_UPDATED)
   private handleExpenseUpdatedEvent(expense: Expense) {
-    return this.transactionService.update(expense);
+    return this.transactionService.update(expense, TransactionType.EXPENSE);
   }
 
   @OnEvent(EXPENSE_DELETED)
-  private handleExpenseDeletedEvent(expense: Expense) {
-    return this.transactionService.remove(expense);
+  private handleExpenseDeletedEvent(id: number) {
+    return this.transactionService.remove(id, TransactionType.EXPENSE);
   }
 }

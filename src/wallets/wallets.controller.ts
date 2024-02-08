@@ -88,9 +88,8 @@ export class WalletsController {
   async update(
     @Param('id') id: string,
     @Body() updateWalletDto: UpdateWalletDto,
-    @Req() req: Request & { user: User },
   ): Promise<Transform<any>> {
-    await this.walletService.update(+id, updateWalletDto, req);
+    await this.walletService.update(+id, updateWalletDto);
 
     return {
       status: 'success',
@@ -102,11 +101,8 @@ export class WalletsController {
   @Delete(':id')
   @Version('1')
   @RequiresPermission(Action.DELETE)
-  async remove(
-    @Param('id') id: string,
-    @Req() req: Request & { user: User },
-  ): Promise<Transform<any>> {
-    await this.walletService.remove(+id, req);
+  async remove(@Param('id') id: string): Promise<Transform<any>> {
+    await this.walletService.remove(+id);
 
     return {
       status: 'success',

@@ -23,9 +23,12 @@ import { UploadService } from '../images/upload/upload.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions, ParseFilePipe } from '../config';
 import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.filter';
+import { ExpenseGuard } from './expense.guard';
+import { Action } from '../common/constants';
+import { RequiresPermission } from '../common/decorators/requires-permission';
 
 @Controller('expenses')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, ExpenseGuard)
 export class ExpensesController {
   constructor(
     private readonly expensesService: ExpensesService,
@@ -58,8 +61,9 @@ export class ExpensesController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Req() req: Request & { user: User }) {
-    const expense = this.expensesService.findOne(+id, req);
+  @RequiresPermission(Action.READ)
+  async findOne(@Param('id') id: string) {
+    const expense = this.expensesService.findOneOrFail(+id);
 
     return {
       status: 'success',
@@ -69,16 +73,12 @@ export class ExpensesController {
   }
 
   @Patch(':id')
+  @RequiresPermission(Action.UPDATE)
   async update(
     @Param('id') id: string,
     @Body() updateExpenseDto: UpdateExpenseDto,
-    @Req() req: Request & { user: User },
   ) {
-    const expense = await this.expensesService.update(
-      +id,
-      updateExpenseDto,
-      req,
-    );
+    const expense = await this.expensesService.update(+id, updateExpenseDto);
 
     return {
       status: 'success',
@@ -88,6 +88,7 @@ export class ExpensesController {
   }
 
   @Delete(':id')
+  @RequiresPermission(Action.DELETE)
   async remove(@Param('id') id: string) {
     await this.expensesService.remove(+id);
 

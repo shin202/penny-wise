@@ -76,7 +76,7 @@ export class CategoriesController {
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    await this.categoriesService.updateOrFail(+id, updateCategoryDto);
+    await this.categoriesService.update(+id, updateCategoryDto);
 
     return {
       status: 'success',
@@ -88,7 +88,7 @@ export class CategoriesController {
   @Delete(':id')
   @Version('1')
   async destroy(@Param('id') id: string) {
-    await this.categoriesService.deleteOrFail(+id);
+    await this.categoriesService.delete(+id);
 
     return {
       status: 'success',

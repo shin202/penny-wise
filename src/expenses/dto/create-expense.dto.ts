@@ -1,7 +1,6 @@
 import { IsExists } from '../../shared/validation/is-exists';
 import { Wallet } from '../../wallets/entities/wallet.entity';
 import {
-  IsDate,
   IsDateString,
   IsDecimal,
   IsNotEmpty,
@@ -39,5 +38,5 @@ export class CreateExpenseDto {
   transactionDate: Date;
 
   @IsOptional()
-  imageNames?: string[] = [];
+  imageNames?: string[];
 }
