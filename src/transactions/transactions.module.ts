@@ -3,13 +3,18 @@ import { TransactionsService } from './transactions.service';
 import { TransactionsController } from './transactions.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Transaction } from './entities/transaction.entity';
-import { ExpenseService } from './expense/expense.service';
-import { IncomeService } from './income/income.service';
+import { ExpenseTransactionService } from './expense-transaction/expense-transaction.service';
+import { IncomeTransactionService } from './income-transaction/income-transaction.service';
 import { StatsService } from './stats/stats.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Transaction])],
   controllers: [TransactionsController],
-  providers: [TransactionsService, ExpenseService, IncomeService, StatsService],
+  providers: [
+    TransactionsService,
+    ExpenseTransactionService,
+    IncomeTransactionService,
+    StatsService,
+  ],
 })
 export class TransactionsModule {}

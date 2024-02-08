@@ -35,38 +35,55 @@ export class CategoriesService {
   }
 
   findAll(): Promise<Category[]> {
-    return this.categoryRepository.findTrees();
+    return this.categoryRepository.findTrees({
+      relations: ['image'],
+      depth: 2,
+    });
   }
 
   findOneOrFail(id: number) {
     return this.categoryRepository.findOneOrFail({
       where: { id },
+      relations: {
+        image: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        description: true,
+        parent: {
+          id: true,
+          name: true,
+        },
+        image: {
+          name: true,
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 
-  async updateOrFail(id: number, updateCategoryDto: UpdateCategoryDto) {
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     const { parentId, imageName, ...rest } = updateCategoryDto;
-
-    const category: Category = await this.findOneOrFail(id);
 
     const parentCategory: Category = parentId
       ? await this.findOneOrFail(parentId)
-      : category.parent;
+      : undefined;
 
     const image: Image = imageName
       ? await this.imageService.findByName(imageName)
-      : category.image;
+      : undefined;
 
-    return this.categoryRepository.save({
-      ...category,
+    return this.categoryRepository.update(id, {
       ...rest,
       parent: parentCategory,
       image,
     });
   }
 
-  async deleteOrFail(id: number) {
-    const category: Category = await this.findOneOrFail(id);
-    return this.categoryRepository.remove(category);
+  async delete(id: number) {
+    return this.categoryRepository.delete(id);
   }
 }

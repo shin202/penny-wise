@@ -25,9 +25,12 @@ import { UploadService } from '../images/upload/upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { multerOptions, ParseFilePipe } from '../config';
 import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.filter';
+import { WalletGuard } from './wallet.guard';
+import { Action } from '../common/constants';
+import { RequiresPermission } from '../common/decorators/requires-permission';
 
 @Controller('wallets')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, WalletGuard)
 export class WalletsController {
   constructor(
     private readonly walletService: WalletsService,
@@ -68,6 +71,7 @@ export class WalletsController {
 
   @Get(':id')
   @Version('1')
+  @RequiresPermission(Action.READ)
   async findOne(@Param('id') id: string) {
     const wallet: Wallet = await this.walletService.findOrFail(+id);
 
@@ -80,12 +84,12 @@ export class WalletsController {
 
   @Patch(':id')
   @Version('1')
+  @RequiresPermission(Action.UPDATE)
   async update(
     @Param('id') id: string,
     @Body() updateWalletDto: UpdateWalletDto,
-    @Req() req: Request & { user: User },
   ): Promise<Transform<any>> {
-    await this.walletService.update(+id, updateWalletDto, req);
+    await this.walletService.update(+id, updateWalletDto);
 
     return {
       status: 'success',
@@ -96,11 +100,9 @@ export class WalletsController {
 
   @Delete(':id')
   @Version('1')
-  async remove(
-    @Param('id') id: string,
-    @Req() req: Request & { user: User },
-  ): Promise<Transform<any>> {
-    await this.walletService.remove(+id, req);
+  @RequiresPermission(Action.DELETE)
+  async remove(@Param('id') id: string): Promise<Transform<any>> {
+    await this.walletService.remove(+id);
 
     return {
       status: 'success',

@@ -36,8 +36,7 @@ export class Category extends BaseEntity {
   })
   description: string;
 
-  @Column({ name: 'type', type: 'smallint' })
-  @Transform(({ value }) => CategoryType[value])
+  @Column({ name: 'type', type: 'varchar' })
   type: CategoryType;
 
   @TreeParent({ onDelete: 'CASCADE' })

@@ -116,8 +116,7 @@ export class TransactionsService {
     return queryBuilder.getRawMany();
   }
 
-  update(payload: Expense | Income) {
-    const transactionType = this.getTransactionType(payload);
+  update(payload: Expense | Income, transactionType: TransactionType) {
     const transactionPayload = this.buildTransactionPayload(payload);
 
     return this.transactionRepository.update(
@@ -129,12 +128,10 @@ export class TransactionsService {
     );
   }
 
-  remove(payload: Expense | Income) {
-    const transactionType = this.getTransactionType(payload);
-
+  remove(id: number, transactionType: TransactionType) {
     return this.transactionRepository.delete({
       transactionType,
-      transactionId: payload.id,
+      transactionId: id,
     });
   }
 
@@ -223,6 +220,7 @@ export class TransactionsService {
         'category.name',
         'currency.id',
         'currency.symbol',
+        'currency.code',
         'wallet.id',
         'wallet.name',
       ])

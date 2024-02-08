@@ -25,9 +25,12 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions, ParseFilePipe } from '../config';
 import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.filter';
 import { UploadService } from '../images/upload/upload.service';
+import { IncomeGuard } from './income.guard';
+import { RequiresPermission } from '../common/decorators/requires-permission';
+import { Action } from '../common/constants';
 
 @Controller('incomes')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, IncomeGuard)
 export class IncomesController {
   constructor(
     private readonly incomesService: IncomesService,
@@ -65,11 +68,9 @@ export class IncomesController {
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-    req: Request & { user: User },
-  ): Promise<Transform<Income>> {
-    const income = await this.incomesService.findOne(+id, req);
+  @RequiresPermission(Action.READ)
+  async findOne(@Param('id') id: string): Promise<Transform<Income>> {
+    const income = await this.incomesService.findOneOrFail(+id);
 
     return {
       status: 'success',
@@ -79,16 +80,12 @@ export class IncomesController {
   }
 
   @Patch(':id')
+  @RequiresPermission(Action.UPDATE)
   async update(
     @Param('id') id: string,
     @Body() updateIncomeDto: UpdateIncomeDto,
-    @Req() req: Request & { user: User },
   ): Promise<Transform<any>> {
-    const income: Income = await this.incomesService.update(
-      +id,
-      updateIncomeDto,
-      req,
-    );
+    const income = await this.incomesService.update(+id, updateIncomeDto);
 
     return {
       status: 'success',
@@ -98,6 +95,7 @@ export class IncomesController {
   }
 
   @Delete(':id')
+  @RequiresPermission(Action.DELETE)
   async remove(@Param('id') id: string): Promise<Transform<any>> {
     await this.incomesService.remove(+id);
 

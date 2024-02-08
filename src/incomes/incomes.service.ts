@@ -13,7 +13,7 @@ import {
   INCOME_CREATED,
   INCOME_DELETED,
   INCOME_UPDATED,
-} from '../common/constants/events.constant';
+} from '../common/constants';
 
 @Injectable()
 export class IncomesService {
@@ -61,41 +61,71 @@ export class IncomesService {
     });
   }
 
-  findOne(id: number, req: Request & { user: User }) {
-    return this.incomeRepository.findOne({
+  findOneOrFail(id: number) {
+    return this.incomeRepository.findOneOrFail({
       where: {
         id,
-        user: { username: req.user.username },
       },
       relations: {
+        user: true,
         wallet: true,
         currency: true,
         category: true,
         images: true,
       },
+      select: {
+        id: true,
+        amount: true,
+        notes: true,
+        transactionDate: true,
+        wallet: {
+          id: true,
+          name: true,
+        },
+        currency: {
+          id: true,
+          name: true,
+          code: true,
+        },
+        category: {
+          id: true,
+          name: true,
+        },
+        images: {
+          id: true,
+          name: true,
+        },
+        user: {
+          id: true,
+          username: true,
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 
-  async update(
-    id: number,
-    updateIncomeDto: UpdateIncomeDto,
-    req: Request & { user: User },
-  ) {
+  async update(id: number, updateIncomeDto: UpdateIncomeDto) {
     const { walletId, categoryId, currencyId, imageNames, ...rest } =
       updateIncomeDto;
 
-    const images: Image[] = await this.imageService.findInNames(imageNames);
+    const income: Income = await this.findOneOrFail(id);
 
-    const income: Income = await this.findOne(id, req);
+    const images: Image[] = imageNames
+      ? await this.imageService.findInNames(imageNames)
+      : undefined;
 
-    const savedIncome: Income = await this.incomeRepository.save({
+    const category = categoryId ? { id: categoryId } : undefined;
+    const currency = currencyId ? { id: currencyId } : undefined;
+    const wallet = walletId ? { id: walletId } : undefined;
+
+    const savedIncome = await this.incomeRepository.save({
       ...income,
       ...rest,
       images,
-      wallet: { id: walletId || income.wallet.id },
-      category: { id: categoryId || income.category.id },
-      currency: { id: currencyId || income.currency.id },
-      user: { id: req.user.id },
+      wallet,
+      category,
+      currency,
     });
 
     this.eventEmitter.emit(INCOME_UPDATED, savedIncome);

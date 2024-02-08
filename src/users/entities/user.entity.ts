@@ -25,9 +25,11 @@ export class User extends BaseEntity {
   private tempPassword: string;
 
   @PrimaryGeneratedColumn()
+  @Exclude()
   id: number;
 
   @Column({ name: 'username', type: 'varchar', length: 20, unique: true })
+  @Exclude()
   username: string;
 
   @Column({ name: 'email', type: 'varchar', unique: true })

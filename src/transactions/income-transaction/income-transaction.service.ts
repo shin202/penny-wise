@@ -5,11 +5,12 @@ import {
   INCOME_CREATED,
   INCOME_DELETED,
   INCOME_UPDATED,
-} from '../../common/constants/events.constant';
+} from '../../common/constants';
 import { Income } from '../../incomes/entities/income.entity';
+import { TransactionType } from '../transaction.interface';
 
 @Injectable()
-export class IncomeService {
+export class IncomeTransactionService {
   constructor(private readonly transactionService: TransactionsService) {}
 
   @OnEvent(INCOME_CREATED)
@@ -19,11 +20,11 @@ export class IncomeService {
 
   @OnEvent(INCOME_UPDATED)
   private handleIncomeUpdatedEvent(income: Income) {
-    return this.transactionService.update(income);
+    return this.transactionService.update(income, TransactionType.INCOME);
   }
 
   @OnEvent(INCOME_DELETED)
-  private handleIncomeDeletedEvent(income: Income) {
-    return this.transactionService.remove(income);
+  private handleIncomeDeletedEvent(id: number) {
+    return this.transactionService.remove(id, TransactionType.INCOME);
   }
 }
