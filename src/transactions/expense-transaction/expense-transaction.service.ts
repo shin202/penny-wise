@@ -15,7 +15,7 @@ export class ExpenseTransactionService {
 
   @OnEvent(EXPENSE_CREATED)
   private handleExpenseCreatedEvent(expense: Expense) {
-    return this.transactionService.create(expense);
+    return this.transactionService.create(expense, TransactionType.EXPENSE);
   }
 
   @OnEvent(EXPENSE_UPDATED)

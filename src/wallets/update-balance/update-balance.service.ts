@@ -77,9 +77,9 @@ export class UpdateBalanceService {
     operation: 'increase' | 'decrease',
   ) {
     if (operation === 'increase') {
-      wallet.balance += amount;
+      wallet.balance = Number(wallet.balance) + Number(amount);
     } else {
-      wallet.balance -= amount;
+      wallet.balance = Number(wallet.balance) - Number(amount);
     }
     await wallet.save();
   }

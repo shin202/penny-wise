@@ -14,4 +14,5 @@ export const validationPipeConfig = (): ValidationPipeOptions => ({
     return new BadRequestException(result);
   },
   stopAtFirstError: true,
+  transform: true,
 });

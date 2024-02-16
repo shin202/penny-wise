@@ -23,8 +23,14 @@ export class TransactionsService {
     private readonly convertCurrencyService: ConvertCurrencyService,
   ) {}
 
-  create(payload: Expense | Income): Promise<Transaction> {
-    const transactionPayload = this.buildTransactionPayload(payload);
+  create(
+    payload: Expense | Income,
+    transactionType: TransactionType,
+  ): Promise<Transaction> {
+    const transactionPayload = this.buildTransactionPayload(
+      payload,
+      transactionType,
+    );
     const transaction = this.transactionRepository.create(transactionPayload);
     return this.transactionRepository.save(transaction);
   }
@@ -117,7 +123,10 @@ export class TransactionsService {
   }
 
   update(payload: Expense | Income, transactionType: TransactionType) {
-    const transactionPayload = this.buildTransactionPayload(payload);
+    const transactionPayload = this.buildTransactionPayload(
+      payload,
+      transactionType,
+    );
 
     return this.transactionRepository.update(
       {
@@ -135,7 +144,10 @@ export class TransactionsService {
     });
   }
 
-  private buildTransactionPayload(payload: Expense | Income) {
+  private buildTransactionPayload(
+    payload: Expense | Income,
+    transactionType: TransactionType,
+  ) {
     return {
       user: payload.user,
       wallet: payload.wallet,
@@ -143,15 +155,9 @@ export class TransactionsService {
       currency: payload.currency,
       amount: payload.amount,
       transactionDate: payload.transactionDate,
-      transactionType: this.getTransactionType(payload),
+      transactionType,
       transactionId: payload.id,
     };
-  }
-
-  private getTransactionType(payload: Expense | Income) {
-    return payload instanceof Expense
-      ? TransactionType.EXPENSE
-      : TransactionType.INCOME;
   }
 
   private buildFindAllQuery(
@@ -238,6 +244,12 @@ export class TransactionsService {
   ) {
     const queryBuilder =
       this.transactionRepository.createQueryBuilder('transaction');
+
+    if (statsDto.date) {
+      queryBuilder.andWhere(`DATE(transaction.transactionDate) = :date`, {
+        date: statsDto.date,
+      });
+    }
 
     if (statsDto.startDate && statsDto.endDate) {
       queryBuilder.andWhere(

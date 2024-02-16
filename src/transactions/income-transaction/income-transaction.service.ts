@@ -15,7 +15,7 @@ export class IncomeTransactionService {
 
   @OnEvent(INCOME_CREATED)
   private handleIncomeCreatedEvent(income: Income) {
-    return this.transactionService.create(income);
+    return this.transactionService.create(income, TransactionType.INCOME);
   }
 
   @OnEvent(INCOME_UPDATED)

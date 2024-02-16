@@ -31,7 +31,9 @@ export class ExpensesService {
     const { walletId, categoryId, currencyId, imageNames, ...rest } =
       createExpenseDto;
 
-    const images: Image[] = await this.imageService.findInNames(imageNames);
+    const images: Image[] = imageNames
+      ? await this.imageService.findInNames(imageNames)
+      : undefined;
 
     const expense: Expense = this.expenseRepository.create({
       category: { id: categoryId },

@@ -12,6 +12,10 @@ import { Wallet } from '../../wallets/entities/wallet.entity';
 import { Type } from 'class-transformer';
 
 export class StatsDto {
+  @IsDateString()
+  @IsOptional()
+  readonly date?: Date;
+
   @ValidateIf((o) => o.endDate)
   @IsDateString()
   @IsNotEmpty()

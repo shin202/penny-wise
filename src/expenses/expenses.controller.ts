@@ -63,7 +63,7 @@ export class ExpensesController {
   @Get(':id')
   @RequiresPermission(Action.READ)
   async findOne(@Param('id') id: string) {
-    const expense = this.expensesService.findOneOrFail(+id);
+    const expense = await this.expensesService.findOneOrFail(+id);
 
     return {
       status: 'success',
