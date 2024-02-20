@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AbilityFactory } from '../common/providers/ability.factory';
+import { AbilityFactoryProvider } from '../common/providers/ability-factory.provider';
 import { WalletsService } from './wallets.service';
 import { Action } from '../common/constants';
 import { REQUIRES_PERMISSION_KEY } from '../common/decorators/requires-permission';
@@ -18,7 +18,7 @@ import { ForbiddenError } from '@casl/ability';
 export class WalletGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly abilityFactory: AbilityFactory,
+    private readonly abilityFactory: AbilityFactoryProvider,
     private readonly walletService: WalletsService,
   ) {}
 

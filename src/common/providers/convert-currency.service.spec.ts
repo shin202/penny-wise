@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConvertCurrencyService } from './convert-currency.service';
+import { ConvertCurrencyProvider } from './convert-currency.provider';
 
 describe('ConvertCurrencyService', () => {
-  let service: ConvertCurrencyService;
+  let service: ConvertCurrencyProvider;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ConvertCurrencyService],
+      providers: [ConvertCurrencyProvider],
     }).compile();
 
-    service = module.get<ConvertCurrencyService>(ConvertCurrencyService);
+    service = module.get<ConvertCurrencyProvider>(ConvertCurrencyProvider);
   });
 
   it('should be defined', () => {

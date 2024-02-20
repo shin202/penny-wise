@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @Entity({ name: 'email_verify_tokens' })
 export class EmailVerifyToken extends BaseEntity {

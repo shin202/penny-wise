@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateEmailVerifyTokenDto } from './dto/create-email-verify-token.dto';
 import { EmailVerifyToken } from './entities/email-verify-token.entity';
 import { RandomUtils } from '../utils';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { User } from '../users/entities/user.entity';
 
 @Injectable()

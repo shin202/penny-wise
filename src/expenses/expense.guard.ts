@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AbilityFactory } from '../common/providers/ability.factory';
+import { AbilityFactoryProvider } from '../common/providers/ability-factory.provider';
 import { ExpensesService } from './expenses.service';
 import { REQUIRES_PERMISSION_KEY } from '../common/decorators/requires-permission';
 import { Action } from '../common/constants';
@@ -17,7 +17,7 @@ import { ForbiddenError } from '@casl/ability';
 export class ExpenseGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private abilityFactory: AbilityFactory,
+    private abilityFactory: AbilityFactoryProvider,
     private readonly expenseService: ExpensesService,
   ) {}
 

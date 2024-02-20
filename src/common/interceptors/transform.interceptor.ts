@@ -7,7 +7,7 @@ import {
 import { map, Observable } from 'rxjs';
 import { Transform } from './transform.interface';
 import { instanceToPlain } from 'class-transformer';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { Request } from 'express';
 
 @Injectable()

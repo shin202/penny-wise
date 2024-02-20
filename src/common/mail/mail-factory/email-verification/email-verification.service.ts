@@ -8,7 +8,7 @@ import {
 } from '../../mail.interface';
 import { TemplateUtils, UrlUtils } from '../../../../utils';
 import { ConfigService } from '@nestjs/config';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { MailService } from '../../mail.service';
 
 @Injectable()

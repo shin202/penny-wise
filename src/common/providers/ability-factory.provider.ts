@@ -21,7 +21,7 @@ const conditionsMatcher = (matchConditions: MatchConditions) => matchConditions;
 const AppAbility = PureAbility as AbilityClass<AppAbility>;
 
 @Injectable()
-export class AbilityFactory {
+export class AbilityFactoryProvider {
   defineAbilityFor(authUser: User) {
     const { can, build } = new AbilityBuilder<AppAbility>(AppAbility);
 

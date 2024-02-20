@@ -11,7 +11,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 import { PasswordUtils } from '../../utils';
 import { EmailVerifyToken } from '../../email-verify-tokens/entities/email-verify-token.entity';

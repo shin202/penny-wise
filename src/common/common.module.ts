@@ -12,12 +12,13 @@ import { EmailVerifyTokensModule } from '../email-verify-tokens/email-verify-tok
 import { PasswordResetsController } from '../password-resets/password-resets.controller';
 import { UsersModule } from '../users/users.module';
 import { ImagesModule } from '../images/images.module';
-import { TransformQueryParamsService } from './providers/transform-query-params.service';
-import { ConvertCurrencyService } from './providers/convert-currency.service';
+import { TransformQueryParamsProvider } from './providers/transform-query-params.provider';
+import { ConvertCurrencyProvider } from './providers/convert-currency.provider';
 import { HttpModule } from '@nestjs/axios';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { AbilityFactory } from './providers/ability.factory';
+import { AbilityFactoryProvider } from './providers/ability-factory.provider';
+import { DateProvider } from './providers/date.provider';
 
 @Global()
 @Module({
@@ -36,18 +37,20 @@ import { AbilityFactory } from './providers/ability.factory';
     }),
   ],
   providers: [
-    TransformQueryParamsService,
-    ConvertCurrencyService,
-    AbilityFactory,
+    TransformQueryParamsProvider,
+    ConvertCurrencyProvider,
+    AbilityFactoryProvider,
+    DateProvider,
   ],
   exports: [
     JwtModule,
     MailModule,
     UsersModule,
     ImagesModule,
-    TransformQueryParamsService,
-    ConvertCurrencyService,
-    AbilityFactory,
+    TransformQueryParamsProvider,
+    ConvertCurrencyProvider,
+    AbilityFactoryProvider,
+    DateProvider,
   ],
 })
 export class CommonModule implements NestModule {

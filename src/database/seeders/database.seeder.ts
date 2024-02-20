@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { User } from '../../users/entities/user.entity';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { Category } from '../../categories/entities/category.entity';
 import { Wallet } from '../../wallets/entities/wallet.entity';
 import { Currency } from '../../currencies/entities/currency.entity';

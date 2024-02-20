@@ -6,7 +6,7 @@ import {
   ExceptionFilter,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @Catch(BadRequestException)
 export class DeleteFileOnFailFilter implements ExceptionFilter {

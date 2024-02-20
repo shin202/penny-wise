@@ -1,43 +1,35 @@
 import {
   IsBoolean,
-  IsDateString,
+  IsEnum,
   IsInt,
   IsISO4217CurrencyCode,
   IsNotEmpty,
   IsOptional,
   ValidateIf,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { IsExists } from '../../shared/validation/is-exists';
 import { Wallet } from '../../wallets/entities/wallet.entity';
-import { Type } from 'class-transformer';
+import { TransactionType } from '../transaction.interface';
 
-export class StatsDto {
-  @IsDateString()
-  @IsOptional()
-  readonly date?: Date;
-
-  @IsDateString()
-  @IsOptional()
-  readonly startDate?: Date;
-
-  @ValidateIf((o) => o.startDate)
-  @IsDateString()
-  @IsNotEmpty()
-  readonly endDate?: Date;
-
+export class TransactionReportDto {
   @Type(() => Number)
   @IsExists(Wallet, 'id')
   @IsInt()
   @IsOptional()
   readonly wallet?: number;
 
-  @Type(() => Boolean)
-  @IsBoolean()
-  @IsOptional()
-  readonly isParent?: boolean = false;
+  @IsEnum(TransactionType)
+  @IsNotEmpty()
+  readonly transactionType: TransactionType;
 
   @ValidateIf((o) => !o.wallet)
   @IsISO4217CurrencyCode()
   @IsNotEmpty()
   readonly baseCurrency?: string;
+
+  @Type(() => Boolean)
+  @IsBoolean()
+  @IsOptional()
+  readonly isParent?: boolean = false;
 }

@@ -5,7 +5,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Response } from 'express';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

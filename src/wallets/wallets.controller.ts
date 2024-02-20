@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseFilters,
@@ -28,6 +29,8 @@ import { DeleteFileOnFailFilter } from '../common/filters/delete-file-on-fail.fi
 import { WalletGuard } from './wallet.guard';
 import { Action } from '../common/constants';
 import { RequiresPermission } from '../common/decorators/requires-permission';
+import { ConvertCurrencyDto } from '../common/dto/convert-currency.dto';
+import { WalletReportService } from './wallet-report/wallet-report.service';
 
 @Controller('wallets')
 @UseGuards(AuthGuard, WalletGuard)
@@ -35,6 +38,7 @@ export class WalletsController {
   constructor(
     private readonly walletService: WalletsService,
     private readonly uploadService: UploadService,
+    private readonly walletReportService: WalletReportService,
   ) {}
 
   @Post()
@@ -117,5 +121,13 @@ export class WalletsController {
   @UseFilters(DeleteFileOnFailFilter)
   async uploadImage(@UploadedFile(ParseFilePipe) file: Express.Multer.File) {
     return this.uploadService.upload(file);
+  }
+
+  @Get('stats/total-balance')
+  getTotalBalanceStats(
+    @Query() convertCurrencyDto: ConvertCurrencyDto,
+    @Req() req: Request & { user: User },
+  ) {
+    return this.walletReportService.generateReport(convertCurrencyDto, req);
   }
 }

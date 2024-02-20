@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { Subjects } from '../providers/ability.factory';
+import { Subjects } from '../providers/ability-factory.provider';
 
 export const SET_ENTITY_KEY = 'set_entity';
 

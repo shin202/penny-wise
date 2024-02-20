@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { EXPENSE_CREATED, INCOME_CREATED } from '../../common/constants';
 import { Expense } from '../../expenses/entities/expense.entity';
-import { ConvertCurrencyService } from '../../common/providers/convert-currency.service';
+import { ConvertCurrencyProvider } from '../../common/providers/convert-currency.provider';
 import { WalletsService } from '../wallets.service';
 import { Wallet } from '../entities/wallet.entity';
 import { CurrenciesService } from '../../currencies/currencies.service';
@@ -14,7 +14,7 @@ export class UpdateBalanceService {
   constructor(
     private readonly walletService: WalletsService,
     private readonly currencyService: CurrenciesService,
-    private readonly convertCurrencyService: ConvertCurrencyService,
+    private readonly convertCurrencyService: ConvertCurrencyProvider,
   ) {}
 
   @OnEvent(EXPENSE_CREATED)
@@ -43,7 +43,7 @@ export class UpdateBalanceService {
     );
     const currencyToConvertCode: string = currencyToConvert.code;
 
-    const amount = await this.getConvertedAmount(
+    const amount = await this.convertCurrencyService.convert(
       currencyToConvertCode,
       walletCurrencyCode,
       payload.amount,
@@ -51,24 +51,6 @@ export class UpdateBalanceService {
     );
 
     await this.updateWalletBalance(walletToUpdate, amount, operation);
-  }
-
-  private async getConvertedAmount(
-    from: string,
-    to: string,
-    amount: number,
-    digits: number = 2,
-  ): Promise<number> {
-    if (from !== to) {
-      return await this.convertCurrencyService.convert(
-        from,
-        to,
-        amount,
-        digits,
-      );
-    } else {
-      return amount;
-    }
   }
 
   private async updateWalletBalance(

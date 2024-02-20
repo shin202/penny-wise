@@ -10,6 +10,7 @@ import { CurrenciesService } from '../currencies/currencies.service';
 import { Currency } from '../currencies/entities/currency.entity';
 import { Image } from '../images/entities/image.entity';
 import { ImagesService } from '../images/images.service';
+import { ConvertCurrencyProvider } from '../common/providers/convert-currency.provider';
 
 @Injectable()
 export class WalletsService {
@@ -18,6 +19,7 @@ export class WalletsService {
     private readonly walletRepository: Repository<Wallet>,
     private readonly currencyService: CurrenciesService,
     private readonly imageService: ImagesService,
+    private readonly convertCurrencyService: ConvertCurrencyProvider,
   ) {}
 
   async create(
@@ -122,5 +124,45 @@ export class WalletsService {
 
   remove(id: number) {
     return this.walletRepository.delete(id);
+  }
+
+  async getTotalBalance(
+    req: Request & { user: User },
+    walletId?: number,
+    baseCurrency?: string,
+  ) {
+    const queryBuilder = this.walletRepository.createQueryBuilder('wallet');
+
+    if (walletId) {
+      queryBuilder.andWhere('wallet.id = :walletId', { walletId });
+    }
+
+    queryBuilder
+      .andWhere('users.id = :userId', { userId: req.user.id })
+      .leftJoin('wallet.user', 'users')
+      .leftJoin('wallet.currency', 'currency')
+      .select(['wallet', 'currency.code', 'currency.decimalDigits']);
+
+    const wallets: Wallet[] = await queryBuilder.getMany();
+
+    if (walletId) {
+      return wallets[0].balance;
+    }
+
+    let totalBalance = 0;
+    if (baseCurrency) {
+      for (const wallet of wallets) {
+        const balance = await this.convertCurrencyService.convert(
+          wallet.currency.code,
+          baseCurrency,
+          wallet.balance,
+          wallet.currency.decimalDigits,
+        );
+
+        totalBalance += balance;
+      }
+    }
+
+    return totalBalance;
   }
 }
