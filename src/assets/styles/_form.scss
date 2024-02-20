@@ -16,6 +16,14 @@
 
     &__label {
       @apply text-sm font-semibold text-gray-700;
+
+      &--required {
+        @apply after:content-['*'] after:ml-1 after:text-red-500 after:font-light;
+      }
+
+      &--optional {
+        @apply after:content-['(Optional)'] after:text-surface-500 after:ml-1 after:font-light
+      }
     }
 
     &__input {
@@ -23,7 +31,7 @@
     }
 
     &__validation-error {
-      @apply text-xs text-red-500;
+      @apply text-xs text-red-500 line-clamp-2;
     }
   }
 }

@@ -4,6 +4,7 @@ import avatar from './avatar';
 import avatargroup from './avatargroup';
 import badge from './badge';
 import badgedirective from './badgedirective';
+import blockui from './blockui';
 import breadcrumb from './breadcrumb';
 import button from './button';
 import calendar from './calendar';
@@ -24,7 +25,9 @@ import divider from './divider';
 import dock from './dock';
 import dropdown from './dropdown';
 import fieldset from './fieldset';
+import galleria from './galleria';
 import global from './global';
+import image from './image';
 import inlinemessage from './inlinemessage';
 import inputgroup from './inputgroup';
 import inputgroupaddon from './inputgroupaddon';
@@ -57,6 +60,7 @@ import selectbutton from './selectbutton';
 import sidebar from './sidebar';
 import skeleton from './skeleton';
 import slider from './slider';
+import speeddial from './speeddial';
 import splitbutton from './splitbutton';
 import steps from './steps';
 import tabmenu from './tabmenu';
@@ -65,6 +69,7 @@ import tag from './tag';
 import terminal from './terminal';
 import textarea from './textarea';
 import tieredmenu from './tieredmenu';
+import timeline from './timeline';
 import toast from './toast';
 import togglebutton from './togglebutton';
 import toolbar from './toolbar';
@@ -112,6 +117,7 @@ export default {
     //buttons
     button,
     splitbutton,
+    speeddial,
 
     //data
     paginator,
@@ -123,6 +129,7 @@ export default {
     orderlist,
     picklist,
     treetable,
+    timeline,
 
     //panels
     accordion,
@@ -159,6 +166,8 @@ export default {
 
     //media
     carousel,
+    galleria,
+    image,
 
     //misc
     badge,
@@ -169,5 +178,6 @@ export default {
     progressbar,
     skeleton,
     scrolltop,
-    terminal
+    terminal,
+    blockui
 };

@@ -4,6 +4,9 @@ export default {
             // Font
             'font-sans leading-none',
 
+            // Flex
+            { 'flex-1 w-[1%]': parent.instance.$name == 'InputGroup' },
+
             // Spacing
             'm-0',
             {
@@ -27,7 +30,7 @@ export default {
             // States
             {
                 'hover:border-primary-500 dark:hover:border-primary-400': !context.disabled,
-                'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-500/50 dark:focus:ring-primary-400/50': !context.disabled,
+                'focus:outline-none focus:outline-offset-0 focus:ring focus:ring-primary-500/50 dark:focus:ring-primary-400/50 focus:z-10': !context.disabled,
                 'opacity-60 select-none pointer-events-none cursor-default': context.disabled
             },
 

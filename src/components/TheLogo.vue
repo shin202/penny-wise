@@ -15,7 +15,7 @@
   @apply flex items-center;
 
   &__text {
-    @apply uppercase text-lg md:text-xl font-bold tracking-widest px-4 py-2 bg-primary-500 text-white rounded;
+    @apply uppercase text-center text-lg md:text-xl font-bold tracking-widest px-4 py-2 bg-primary-500 text-white rounded;
   }
 }
 </style>
